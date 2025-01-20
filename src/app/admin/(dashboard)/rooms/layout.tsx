@@ -16,8 +16,8 @@ export default function RoomsLayout({
           <p className="font-medium text-xl flex items-center gap-2.5 w-40">
             <BiBed className="text-base" /> Rooms
           </p>
-          <Search />
-          <div className="flex justify-end gap-4 w-40">
+          <div className="flex justify-end items-center gap-2 w-40">
+            <Search />
             <AddButton />
           </div>
         </div>

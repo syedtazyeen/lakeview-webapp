@@ -15,8 +15,8 @@ export default function RoomsLayout({
           <p className="font-medium text-xl flex items-center gap-2.5 w-40">
             <BiCalendarAlt className="text-base" /> Bookings
           </p>
-          <Search />
-          <div className="flex justify-end gap-4 w-40">
+          <div className="flex items-center justify-end gap-2 w-40">
+            <Search />
             <Button size="sm" className="flex items-center gap-1">
               <BiPlus className="text-xl" /> New booking
             </Button>

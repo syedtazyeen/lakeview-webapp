@@ -1,5 +1,6 @@
+import Logo from "@/components/common/logo";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BiArrowToLeft,
   BiMenu,
@@ -57,24 +58,27 @@ export default function Sidebar({
   const handleNavigation = (href: string) => {
     router.push(`/admin${href}`);
   };
+
   return (
     <div
       className={`${
-        expanded ? "w-48" : "w-10"
-      } fixed z-0 h-full py-6 gap-2 mx-3 overflow-hidden `}
+        expanded ? "w-52" : "w-12"
+      } fixed z-0 h-[calc(100%-1rem)] px-1.5 py-4 mt-2 gap-2 mx-2 overflow-hidden bg-card flex flex-col items-center rounded-2xl shadow-md transition-all duration-300 ease-in-out`}
     >
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className={`h-6 w-full flex items-center ${
-          expanded ? "justify-end" : "justify-center"
-        } rounded-full hover:text-accent mt-1 mb-10`}
-      >
-        {expanded ? (
-          <BiArrowToLeft className="text-xl" />
-        ) : (
-          <BiMenu className="text-2xl" />
-        )}
-      </button>
+      <div className="flex flex-col items-start w-full px-2">
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className={`h-6 w-full flex items-center ${
+            expanded ? "justify-end" : "justify-center"
+          } rounded-full hover:text-accent mt-1 mb-10`}
+        >
+          {expanded ? (
+            <BiArrowToLeft className="text-xl" />
+          ) : (
+            <BiMenu className="text-2xl" />
+          )}
+        </button>
+      </div>
 
       {menuItems.map(({ icon: Icon, label, href }, index) => {
         const isActive =
@@ -86,20 +90,18 @@ export default function Sidebar({
           <div
             key={index}
             onClick={() => handleNavigation(href)}
-            className={`relative px-2.5 my-2 h-9 flex gap-4 items-center text-sm font-medium cursor-pointer
-                ${
-                  expanded
-                    ? "w-full justify-start rounded-lg"
-                    : "aspect-square rounded-lg justify-center"
-                }
+            className={`relative px-2.5 h-9 flex gap-2 justify-start items-center text-sm font-medium cursor-pointer w-full
+                 rounded-lg overflow-hidden
                 ${
                   isActive
                     ? "bg-accent text-accent-foreground shadow-sm"
                     : "text-muted-foreground"
-                } group`}
+                } group transition-all duration-300 ease-in-out`}
           >
-            <Icon className="text-base z-20" />
-            {expanded && label}
+            <div className="w-fit flex items-center gap-2">
+              <Icon className="text-base z-20" />
+              <span className={expanded ? "" : "hidden"}>{label}</span>
+            </div>
           </div>
         );
       })}

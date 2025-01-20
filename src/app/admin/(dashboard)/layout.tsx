@@ -18,7 +18,7 @@ export default function DashboardLayout({
         <div
           className={`p-2 ${
             expanded ? "ml-56" : "ml-14"
-          } h-full transition-all duration-150`}
+          } h-full transition-all duration-300 ease-in-out`}
         >
           {children}
         </div>
