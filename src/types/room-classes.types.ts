@@ -5,6 +5,16 @@ type RoomClassesAvailabilityRequest = {
   guestCount?: number;
 };
 
+type RoomClassesRequest = {
+  title: string;
+  description: string;
+  basePrice: number;
+  maxGuestCount: number;
+  images?: string[];
+  features: string[];
+  bedTypes: string[];
+};
+
 enum RoomBedType {
   SINGLE = "SINGLE",
   DOUBLE = "DOUBLE",

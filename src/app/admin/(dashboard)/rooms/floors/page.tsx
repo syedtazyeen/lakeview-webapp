@@ -128,7 +128,7 @@ export default function TableDemo() {
 
   if (invoices.length === 0)
     return (
-      <div className="bg-background max-w-[40rem] aspect-[7/2] my-6 mx-auto p-4 rounded-xl space-y-1 overflow-x-hidden">
+      <div className="bg-background-base max-w-[40rem] aspect-[7/2] my-6 mx-auto p-4 rounded-xl space-y-1 overflow-x-hidden">
         <p className="font-medium text-lg">
           Add floor to begin with creating room for guests
         </p>
@@ -155,7 +155,7 @@ export default function TableDemo() {
       <div className="flex-1 overflow-auto px-6">
         <table className="w-full mt-8 table-auto text-sm">
           {/* Table Header */}
-          <thead className="bg-card border-b sticky top-0 py-1">
+          <thead className="bg-background border-b sticky top-0 py-1">
             <tr>
               <th className="w-32 py-2 text-left font-medium text-muted-foreground">
                 Floor No.

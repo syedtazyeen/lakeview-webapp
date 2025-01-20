@@ -14,6 +14,7 @@ import { setAppCookie } from "@/lib/cookies";
 import { COOKIES } from "@/lib/constants";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -105,9 +106,14 @@ export default function Login() {
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
           </div>
-          <div className="w-full flex items-center gap-2 text-sm">
-            <input type="checkbox" disabled={isPending} />
-            <p>Keep me logged in</p>
+          <div className="flex items-center gap-2">
+            <Checkbox id="terms" className="-translate-y-[1px] data-[state=checked]:border-accent data-[state=checked]:bg-accent" />
+            <label
+              htmlFor="terms"
+              className="text-sm peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Keep me logged in
+            </label>
           </div>
           <Button className="w-full mt-4" type="submit" disabled={isPending}>
             {isPending ? "Logging in..." : "Log in"}

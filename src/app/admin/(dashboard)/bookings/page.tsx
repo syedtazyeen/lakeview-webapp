@@ -173,7 +173,7 @@ export default function TableDemo() {
         </div>
         <table className="w-full min-w-[1080px] mt-4 table-auto text-sm">
           {/* Table Header */}
-          <thead className="bg-card border-b sticky top-0 py-1">
+          <thead className="bg-background border-b sticky top-0 py-1">
             <tr>
               <th className="w-44 py-2 text-left font-medium text-muted-foreground">
                 Booking ID

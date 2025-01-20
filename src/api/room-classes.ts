@@ -28,13 +28,13 @@ export async function getRoomClassById(roomClassId: string) {
   return await axiosInstance.get<RoomClass>(`/${RESOURCE}/${roomClassId}`);
 }
 
-export async function createRoomClass(payload: RoomRequest) {
+export async function createRoomClass(payload: RoomClassesRequest) {
   return await axiosInstance.post<RoomClass>(`/${RESOURCE}`, payload);
 }
 
 export async function updateRoomClass(
   roomClassId: string,
-  payload: Partial<RoomRequest>
+  payload: Partial<RoomClassesRequest>
 ) {
   return await axiosInstance.put<RoomClass>(
     `/${RESOURCE}/${roomClassId}`,

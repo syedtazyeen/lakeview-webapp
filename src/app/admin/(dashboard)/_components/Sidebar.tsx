@@ -63,7 +63,7 @@ export default function Sidebar({
     <div
       className={`${
         expanded ? "w-52" : "w-12"
-      } fixed z-0 h-[calc(100%-1rem)] px-1.5 py-4 mt-2 gap-2 mx-2 overflow-hidden bg-card flex flex-col items-center rounded-2xl shadow-md transition-all duration-300 ease-in-out`}
+      } fixed z-0 h-[calc(100%-1rem)] px-1.5 py-4 mt-2 gap-2 mx-2 overflow-hidden bg-background flex flex-col items-center rounded-2xl shadow-md transition-all duration-300 ease-in-out`}
     >
       <div className="flex flex-col items-start w-full px-2">
         <button
@@ -95,12 +95,12 @@ export default function Sidebar({
                 ${
                   isActive
                     ? "bg-accent text-accent-foreground shadow-sm"
-                    : "text-muted-foreground"
+                    : ""
                 } group transition-all duration-300 ease-in-out`}
           >
             <div className="w-fit flex items-center gap-2">
-              <Icon className="text-base z-20" />
-              <span className={expanded ? "" : "hidden"}>{label}</span>
+              <Icon className="text-base z-20 " />
+              <span className={expanded ? "translate-y-[1px]" : "hidden"}>{label}</span>
             </div>
           </div>
         );

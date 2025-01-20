@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { BiPlus } from "react-icons/bi";
 import NewRoom from "./NewRoom";

@@ -129,7 +129,7 @@ export default function TableDemo() {
 
   if (rooms.length === 0)
     return (
-      <div className="bg-background max-w-[40rem] aspect-[7/2] my-6 mx-auto p-4 rounded-xl space-y-1 overflow-x-hidden">
+      <div className="bg-background-base max-w-[40rem] aspect-[7/2] my-6 mx-auto p-4 rounded-xl space-y-1 overflow-x-hidden">
         <p className="font-medium text-lg">
           Add rooms and begin with guest bookings in loop
         </p>
@@ -154,7 +154,7 @@ export default function TableDemo() {
   return (
     <>
       <div className="flex-1 overflow-auto px-6">
-        <div className="py-4 flex items-center gap-4">
+        <div className="py-6 flex items-center gap-4">
           <Badge className="py-2 bg-accent/10 text-accent" variant="secondary">
             Total rooms: {rooms.length}
           </Badge>
@@ -165,9 +165,9 @@ export default function TableDemo() {
             Vacant rooms: {rooms.length}
           </Badge>
         </div>
-        <table className="w-full min-w-[1080px] mt-4 table-auto text-sm">
+        <table className="w-full min-w-[1080px] table-auto text-sm">
           {/* Table Header */}
-          <thead className="bg-card border-b sticky top-0 py-1">
+          <thead className="bg-background border-b sticky top-0 py-1">
             <tr>
               <th className="w-44 py-2 text-left font-medium text-muted-foreground">
                 Room No.
