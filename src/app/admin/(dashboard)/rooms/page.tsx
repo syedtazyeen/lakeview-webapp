@@ -10,7 +10,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { BiFilter, BiPlus, BiSolidBookContent } from "react-icons/bi";
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import TabLoader from "@/components/common/tab-loader";
@@ -19,6 +19,8 @@ import { useRoomsLoader } from "@/loaders/room";
 import TabEmpty from "@/components/common/tab-empty";
 
 export default function Rooms() {
+  const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
   const { rooms, isLoading, error } = useRoomsLoader();
@@ -30,11 +32,10 @@ export default function Rooms() {
   );
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // You can adjust the number of items per page
+  const itemsPerPage = 10;
 
   const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
 
-  // Get the rooms to display based on currentPage
   const displayedRooms = filteredRooms.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -65,7 +66,10 @@ export default function Rooms() {
           email, SMS, WhatsApp, and more."
         button1={{ label: "Learn" }}
         button1Icon={BiSolidBookContent}
-        button2={{ label: "Add rooms" }}
+        button2={{
+          label: "Add rooms",
+          onClick: () => router.push(`${pathname}?tab=new`),
+        }}
         button2Icon={BiPlus}
       />
     );
@@ -125,7 +129,9 @@ export default function Rooms() {
                 >
                   <td className="w-24 py-4">{room.floor.name}</td>
                   <td className="w-24 py-4">{room.roomNumber}</td>
-                  <td className="w-56 py-4 line-clamp-1">{room.roomClass.title}</td>
+                  <td className="w-56 py-4 line-clamp-1">
+                    {room.roomClass.title}
+                  </td>
                   <td className="w-40 py-4">{room.roomStatus}</td>
                   <td className="w-40 py-4">
                     {formatDistanceToNow(room.updatedAt, { addSuffix: true })}

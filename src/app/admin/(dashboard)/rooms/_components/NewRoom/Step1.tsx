@@ -16,6 +16,9 @@ import ErrorText from "@/components/common/error-text";
 import { IData } from ".";
 import { DrawerClose } from "@/components/ui/drawer";
 import useRoomStore from "@/store/rooms";
+import TabEmpty from "@/components/common/tab-empty";
+import { BiPlus, BiSolidBookContent } from "react-icons/bi";
+import { useRouter } from "next/navigation";
 
 const Step2Schema = z.object({
   categoryId: z.string().min(1, "Category is required"),
@@ -40,6 +43,7 @@ export default function Step1({ step, setStep, data, saveData }: Props) {
     defaultValues: data,
   });
 
+  const router = useRouter();
   const { categories } = useRoomStore();
 
   function onSubmit(stepData: Step1FormValues) {
@@ -52,37 +56,52 @@ export default function Step1({ step, setStep, data, saveData }: Props) {
       className="h-full flex flex-col space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="space-y-1">
-        <Label>Room category</Label>
-        <p className="mb-4 text-sm text-muted-foreground">
-          Select the class of rooms from the available options where you would
-          like to add.
-        </p>
-        <Controller
-          name="categoryId"
-          control={control}
-          render={({ field }) => (
-            <Select
-              onValueChange={(value) => field.onChange(value)}
-              value={field.value}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a floor" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {categories.map((category, index) => (
-                    <SelectItem key={index} value={category.id}>
-                      {category.title}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          )}
+      {categories.length === 0 ? (
+        <TabEmpty
+          title="Adding a room requires a category"
+          subtitle="Introduce a new room category or class specifically designed to accommodate guests. This creates a dedicated space tailored to their needs, enhancing comfort and providing a seamless experience."
+          page={false}
+          button1={{ label: "Learn" }}
+          button1Icon={BiSolidBookContent}
+          button2={{
+            label: "Add category",
+            onClick: () => router.push(`/admin/rooms/categories?tab=new`),
+          }}
+          button2Icon={BiPlus}
         />
-        <ErrorText {...errors.categoryId} />
-      </div>
+      ) : (
+        <div className="space-y-1">
+          <Label>Room category</Label>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Select the class of rooms from the available options where you would
+            like to add.
+          </p>
+          <Controller
+            name="categoryId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                onValueChange={(value) => field.onChange(value)}
+                value={field.value}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a room category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {categories.map((category, index) => (
+                      <SelectItem key={index} value={category.id}>
+                        {category.title}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
+          />
+          <ErrorText {...errors.categoryId} />
+        </div>
+      )}
 
       <div className="pt-4 flex items-end justify-end gap-4">
         <DrawerClose asChild>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { BiPlus, BiSolidBookContent } from "react-icons/bi";
 import TabEmpty from "@/components/common/tab-empty";
@@ -10,6 +10,7 @@ import ViewCategory from "../_components/ViewCategory";
 import { useFloorsLoader } from "@/loaders/room";
 
 export default function Categories() {
+  const pathname= usePathname()
   const router = useRouter();
   const { floors, isLoading, error } = useFloorsLoader();
 
@@ -26,7 +27,7 @@ export default function Categories() {
         enhancing the overall functionality of the space."
         button1={{ label: "Learn" }}
         button1Icon={BiSolidBookContent}
-        button2={{ label: "Add floor" }}
+        button2={{ label: "Add floor", onClick : ()=> router.push(`${pathname}?tab=new`) }}
         button2Icon={BiPlus}
       />
     );

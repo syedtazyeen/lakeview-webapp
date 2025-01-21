@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   DrawerContent,
@@ -10,11 +10,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { BiBed, BiPlus } from "react-icons/bi";
 import { Label } from "@/components/ui/label";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
+import { useToast } from "@/hooks/use-toast";
+import useRoomStore from "@/store/rooms";
+import { createRoomClass } from "@/api/room-classes";
 
 export interface IData {
   title: string;
@@ -35,9 +38,14 @@ const initialData: IData = {
 export default function NewCategory() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const tab = searchParams.get("tab") || "";
+  const pathname = usePathname();
+  const { toast } = useToast();
+  const { addCategory } = useRoomStore();
+  const [saving, setSaving] = useState(false);
   const [step, setStep] = React.useState(1);
   const [data, setData] = React.useState<IData>(initialData);
+
+  const tab = searchParams.get("tab") || "";
 
   function renderContent() {
     switch (step) {
@@ -91,9 +99,7 @@ export default function NewCategory() {
         );
 
       case 4:
-        return (
-          <Step4 step={step} setStep={(val) => setStep(val)} data={data} />
-        );
+        return <Step4 loading={saving} />;
 
       default:
         return;
@@ -110,6 +116,42 @@ export default function NewCategory() {
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     router.push(newUrl);
   }
+
+  function uploadImages() {}
+
+  async function createRoomCategory() {
+    try {
+      setSaving(true);
+      const res = await createRoomClass({
+        title: data.title,
+        description: data.description || "",
+        basePrice: data.basePrice || 0,
+        maxGuestCount: data.maxGuestCount || 0,
+        features: data.features,
+        bedTypes: [data.bedTypes],
+      });
+      addCategory(res.data);
+      toast({
+        title: "Room category saved",
+        variant: "success",
+      });
+      router.push(pathname);
+    } catch (error) {
+      setStep(step - 1);
+      toast({
+        title: "Failed to save category",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  useEffect(() => {
+    if (step === 4) {
+      createRoomCategory();
+    }
+  }, [step]);
 
   return (
     <Drawer open={tab === "new"} onOpenChange={handleChange}>
@@ -132,7 +174,7 @@ export default function NewCategory() {
               {step < 4 && (
                 <>
                   <Label className="mt-4">Step {step} of 3</Label>
-                  <div className="relative mt-2 mb-8 w-full h-2 rounded-xl bg-muted-foreground/10 overflow-hidden">
+                  <div className="relative mt-2 mb-4 w-full h-2 rounded-xl bg-muted-foreground/10 overflow-hidden">
                     <div
                       style={{ width: `${(step / 4) * 100}%` }}
                       className={`absolute h-2 bg-accent rounded-xl transition-all duration-200`}

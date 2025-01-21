@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   DrawerContent,
@@ -10,13 +10,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { BiBed, BiPlus } from "react-icons/bi";
 import { Label } from "@/components/ui/label";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
 import { useFloorsLoader, useRoomClassesLoader } from "@/loaders/room";
 import TabLoader from "@/components/common/tab-loader";
+import { useToast } from "@/hooks/use-toast";
+import useRoomStore from "@/store/rooms";
+import { createRoom } from "@/api/rooms";
 
 export interface IData {
   categoryId?: string;
@@ -28,11 +31,17 @@ const initialData: IData = {};
 export default function NewRoom() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const tab = searchParams.get("tab") || "";
+  const pathname = usePathname();
+  const { toast } = useToast();
+  const { addRoom } = useRoomStore();
+  const [saving, setSaving] = useState(false);
   const [step, setStep] = React.useState(1);
   const [data, setData] = React.useState<IData>(initialData);
+
   const { isLoading: floorsLoading } = useFloorsLoader();
   const { isLoading: categoriesLoading } = useRoomClassesLoader();
+
+  const tab = searchParams.get("tab") || "";
 
   function renderContent() {
     switch (step) {
@@ -82,12 +91,46 @@ export default function NewRoom() {
         );
 
       case 4:
-        return (
-          <Step4 step={step} setStep={(val) => setStep(val)} data={data} />
-        );
+        return <Step4 loading={saving} />;
 
       default:
         return;
+    }
+  }
+
+  async function createManyRooms() {
+    setSaving(true);
+    try {
+      if (!data.categoryId || !data.floorId || !data.roomNumbers) return;
+      const roomClassId = data.categoryId;
+      const floorId = data.floorId;
+      const roomPromises = Object.keys(data.roomNumbers).map((roomNumber) =>
+        createRoom({
+          roomClassId,
+          floorId,
+          roomNumber,
+          roomStatus: "AVAILABLE",
+        })
+      );
+
+      const res = await Promise.all(roomPromises);
+      res.map((i) => addRoom(i.data));
+
+      toast({
+        title: "Rooms created successfully",
+        description: "All rooms have been created.",
+        variant: "success",
+      });
+      router.push(pathname);
+    } catch (error) {
+      toast({
+        title: "Error creating rooms",
+        description: "An error occurred while creating the rooms.",
+        variant: "destructive",
+      });
+      setStep(step - 1);
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -102,11 +145,17 @@ export default function NewRoom() {
     router.push(newUrl);
   }
 
+  useEffect(() => {
+    if (step === 4) {
+      createManyRooms();
+    }
+  }, [step]);
+
   return (
     <Drawer open={tab === "new"} onOpenChange={handleChange}>
       <DrawerTrigger asChild>
         <Button size="sm" className="flex items-center gap-1">
-          <BiPlus className="text-xl" /> New category
+          <BiPlus className="text-xl" /> New rooms
         </Button>
       </DrawerTrigger>
       <DrawerContent className="h-full">
@@ -122,8 +171,8 @@ export default function NewRoom() {
               </DrawerDescription>
               {!floorsLoading && !categoriesLoading && step < 4 && (
                 <>
-                  <Label className="mt-4">Step {step} of 3</Label>
-                  <div className="relative mt-2 mb-8 w-full h-2 rounded-xl bg-muted-foreground/10 overflow-hidden">
+                  <Label className="mt-2">Step {step} of 3</Label>
+                  <div className="relative mt-2 mb-4 w-full h-2 rounded-xl bg-muted-foreground/10 overflow-hidden">
                     <div
                       style={{ width: `${(step / 4) * 100}%` }}
                       className={`absolute h-2 bg-accent rounded-xl transition-all duration-200`}

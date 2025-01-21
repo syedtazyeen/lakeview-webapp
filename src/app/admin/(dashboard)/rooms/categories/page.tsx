@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { BiBed, BiGroup, BiPlus, BiSolidBookContent } from "react-icons/bi";
 import TabEmpty from "@/components/common/tab-empty";
@@ -12,6 +12,7 @@ import { useRoomClassesLoader } from "@/loaders/room";
 import ViewCategory from "../_components/ViewCategory";
 
 export default function Categories() {
+  const pathname = usePathname();
   const router = useRouter();
   const { categories, isLoading, error } = useRoomClassesLoader();
 
@@ -26,7 +27,10 @@ export default function Categories() {
         subtitle="Introduce a new room category or class specifically designed to accommodate guests. This creates a dedicated space tailored to their needs, enhancing comfort and providing a seamless experience."
         button1={{ label: "Learn" }}
         button1Icon={BiSolidBookContent}
-        button2={{ label: "Add room category" }}
+        button2={{
+          label: "Add room category",
+          onClick: () => router.push(`${pathname}?tab=new`),
+        }}
         button2Icon={BiPlus}
       />
     );
