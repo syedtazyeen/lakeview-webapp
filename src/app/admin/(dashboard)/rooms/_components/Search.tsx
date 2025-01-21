@@ -23,7 +23,7 @@ export default function Search() {
   }, [searchTerm]);
 
   return (
-    <div className="px-6 py-4">
+    <div className="py-4">
       <div className="flex items-center border rounded-lg w-80 h-10 overflow-hidden text-sm">
         <span
           className="h-full bg-muted-foreground/10 text-muted-foreground flex items-center px-2"

@@ -1,34 +1,19 @@
 "use client";
 
-import { getRoomClasses } from "@/api/room-classes";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { BiBed, BiGroup, BiPlus, BiSolidBookContent } from "react-icons/bi";
+import TabEmpty from "@/components/common/tab-empty";
 import TabError from "@/components/common/tab-error";
 import TabLoader from "@/components/common/tab-loader";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useApi } from "@/hooks/use-api";
 import { formatEnumString } from "@/lib/utils";
-import useRoomStore from "@/store/rooms";
-import { useRouter } from "next/navigation";
-import React, { useLayoutEffect } from "react";
-import {
-  BiBed,
-  BiGroup,
-  BiLoaderAlt,
-  BiPlus,
-  BiSolidBookContent,
-} from "react-icons/bi";
+import { useRoomClassesLoader } from "@/loaders/room";
 import ViewCategory from "../_components/ViewCategory";
 
 export default function Categories() {
   const router = useRouter();
-  const { categories, setCategories } = useRoomStore();
-  const { data, isLoading, error } = useApi(getRoomClasses);
-
-  useLayoutEffect(() => {
-    if (data) {
-      setCategories(data.data);
-    }
-  }, [data]);
+  const { categories, isLoading, error } = useRoomClassesLoader();
 
   if (isLoading) return <TabLoader />;
 
@@ -36,32 +21,14 @@ export default function Categories() {
 
   if (categories.length === 0)
     return (
-      <div className="bg-background-base max-w-[40rem] aspect-[7/2] my-6 mx-auto p-4 rounded-xl space-y-1 overflow-x-hidden">
-        {isLoading ? (
-          <p className="font-medium text-lg">Loading categories...</p>
-        ) : (
-          <>
-            <p className="font-medium text-lg">
-              Add category to begin with creating room for guests
-            </p>
-            <p className="text-sm text-muted-foreground pb-8">
-              Proactively support customers wherever they are with targeted and
-              personalized outbound messages. Send them in your product or
-              across email, SMS, WhatsApp, and more.
-            </p>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost">
-                <BiSolidBookContent />
-                Learn
-              </Button>
-              <Button>
-                <BiPlus />
-                Add category
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
+      <TabEmpty
+        title="Add a room category to begin with creating guest spaces"
+        subtitle="Introduce a new room category or class specifically designed to accommodate guests. This creates a dedicated space tailored to their needs, enhancing comfort and providing a seamless experience."
+        button1={{ label: "Learn" }}
+        button1Icon={BiSolidBookContent}
+        button2={{ label: "Add room category" }}
+        button2Icon={BiPlus}
+      />
     );
 
   return (

@@ -62,7 +62,7 @@ export default function Sidebar({
   return (
     <div
       className={`${
-        expanded ? "w-52" : "w-12"
+        expanded ? "w-52" : "w-14"
       } fixed z-0 h-[calc(100%-1rem)] px-1.5 py-4 mt-2 gap-2 mx-2 overflow-hidden bg-background flex flex-col items-center rounded-2xl shadow-md transition-all duration-300 ease-in-out`}
     >
       <div className="flex flex-col items-start w-full px-2">
@@ -90,7 +90,7 @@ export default function Sidebar({
           <div
             key={index}
             onClick={() => handleNavigation(href)}
-            className={`relative px-2.5 h-9 flex gap-2 justify-start items-center text-sm font-medium cursor-pointer w-full
+            className={`relative px-3 h-10 flex gap-2 justify-start items-center text-sm font-medium cursor-pointer w-full
                  rounded-lg overflow-hidden
                 ${
                   isActive
@@ -99,7 +99,7 @@ export default function Sidebar({
                 } group transition-all duration-300 ease-in-out`}
           >
             <div className="w-fit flex items-center gap-2">
-              <Icon className="text-base z-20 " />
+              <Icon className="text-xl z-20 " />
               <span className={expanded ? "translate-y-[1px]" : "hidden"}>{label}</span>
             </div>
           </div>

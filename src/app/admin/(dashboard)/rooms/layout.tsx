@@ -13,12 +13,14 @@ export default function RoomsLayout({
     <div className="bg-background w-full h-full flex flex-col rounded-xl shadow-md overflow-auto">
       <div className="px-6 pt-4 bg-background">
         <div className="flex justify-between items-center h-8">
-          <p className="font-medium text-xl flex items-center gap-2.5 w-40">
-            <BiBed className="text-base" /> Rooms
+          <p className="font-medium text-xl flex items-center gap-2.5">
+            <BiBed className="mb-0.5" /> Rooms
           </p>
-          <div className="flex justify-end items-center gap-2 w-40">
+          <div className="flex justify-end items-center gap-2">
             <Search />
-            <AddButton />
+            <div className="w-44 flex justify-end">
+              <AddButton />
+            </div>
           </div>
         </div>
       </div>

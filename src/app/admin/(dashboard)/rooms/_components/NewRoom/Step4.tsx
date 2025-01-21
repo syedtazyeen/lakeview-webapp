@@ -4,9 +4,9 @@ import Lottie from "lottie-react";
 import LOTTIE_DONE_CHECK from "@/assets/lotties/done-check.json";
 import LOTTIE_UPLOAD from "@/assets/lotties/cloud-upload.json";
 import { usePathname, useRouter } from "next/navigation";
-import { createRoomClass } from "@/api/room-classes";
 import { useToast } from "@/hooks/use-toast";
 import useRoomStore from "@/store/rooms";
+import { createRoom } from "@/api/rooms";
 
 interface Props {
   step: number;
@@ -18,36 +18,44 @@ export default function Step4({ step, setStep, data }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const { toast } = useToast();
-  const { addCategory } = useRoomStore();
+  const { addRoom } = useRoomStore();
   const [submitting, setSubmitting] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  function uploadImages() {}
+  async function createRooms() {
+    setSubmitting(true);
+    setProgress(0);
 
-  async function createRoomCategory() {
     try {
-      setSubmitting(true);
-      setProgress(10);
-      const res = await createRoomClass({
-        title: data.title,
-        description: data.description || "",
-        basePrice: data.basePrice || 0,
-        maxGuestCount: data.maxGuestCount || 0,
-        features: data.features,
-        bedTypes: [data.bedTypes],
-      });
-      addCategory(res.data);
+      if (!data.categoryId || !data.floorId || !data.roomNumbers) return;
+      const roomClassId = data.categoryId;
+      const floorId = data.floorId;
+      const roomPromises = Object.keys(data.roomNumbers).map((roomNumber) =>
+        createRoom({
+          roomClassId,
+          floorId,
+          roomNumber,
+          roomStatus: "AVAILABLE",
+        })
+      );
+
+      const res = await Promise.all(roomPromises);
+      res.map((i) => addRoom(i.data));
+
+      setProgress(100);
       toast({
-        title: "Room category saved",
+        title: "Rooms created successfully",
+        description: "All rooms have been created.",
         variant: "success",
       });
       router.push(pathname);
     } catch (error) {
-      setStep(step - 1);
       toast({
-        title: "Failed to save category",
+        title: "Error creating rooms",
+        description: "An error occurred while creating the rooms.",
         variant: "destructive",
       });
+      setStep(step - 1);
     } finally {
       setSubmitting(false);
     }
@@ -55,7 +63,7 @@ export default function Step4({ step, setStep, data }: Props) {
 
   useEffect(() => {
     if (step === 4 && !submitting) {
-      createRoomCategory();
+      createRooms();
     }
   }, []);
 

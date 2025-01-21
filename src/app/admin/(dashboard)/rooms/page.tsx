@@ -1,159 +1,78 @@
 "use client";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { formatDistanceToNow } from "date-fns";
 import { BiFilter, BiPlus, BiSolidBookContent } from "react-icons/bi";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import TabLoader from "@/components/common/tab-loader";
+import TabError from "@/components/common/tab-error";
+import { useRoomsLoader } from "@/loaders/room";
+import TabEmpty from "@/components/common/tab-empty";
 
-const rooms = [
-  {
-    room: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    room: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    room: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    room: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    room: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    room: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    room: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    room: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    room: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    room: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    room: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    room: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    room: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    room: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    room: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
-
-export default function TableDemo() {
+export default function Rooms() {
   const searchParams = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
+  const { rooms, isLoading, error } = useRoomsLoader();
 
   const filteredRooms = rooms.filter((room) =>
     searchTerm.length > 0
-      ? room.room.toLowerCase().includes(searchTerm.toLowerCase())
+      ? room.roomClass.title.toLowerCase().includes(searchTerm.toLowerCase())
       : true
   );
 
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // You can adjust the number of items per page
 
-  // Function to handle the next page
-  const nextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
+
+  // Get the rooms to display based on currentPage
+  const displayedRooms = filteredRooms.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
-  // Function to handle the previous page
-  const prevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
-  // Slice the filtered rooms based on the current page
-  const startIndex = (currentPage - 1) * 15;
-  const currentInvoices = filteredRooms.slice(startIndex, startIndex + 15);
+  if (isLoading) return <TabLoader />;
 
-  // Calculate total pages
-  const totalPages = Math.ceil(filteredRooms.length / 15);
+  if (error) return <TabError message={error} />;
 
   if (rooms.length === 0)
     return (
-      <div className="bg-background-base max-w-[40rem] aspect-[7/2] my-6 mx-auto p-4 rounded-xl space-y-1 overflow-x-hidden">
-        <p className="font-medium text-lg">
-          Add rooms and begin with guest bookings in loop
-        </p>
-        <p className="text-sm text-muted-foreground pb-8">
-          Proactively support customers wherever they are with targeted and
+      <TabEmpty
+        title="Add new rooms and begin with guest bookings in loop"
+        subtitle=" Proactively support customers wherever they are with targeted and
           personalized outbound messages. Send them in your product or across
-          email, SMS, WhatsApp, and more.
-        </p>
-        <div className="flex items-center gap-4">
-          <Button variant="ghost">
-            <BiSolidBookContent />
-            Learn
-          </Button>
-          <Button>
-            <BiPlus />
-            Add room
-          </Button>
-        </div>
-      </div>
+          email, SMS, WhatsApp, and more."
+        button1={{ label: "Learn" }}
+        button1Icon={BiSolidBookContent}
+        button2={{ label: "Add rooms" }}
+        button2Icon={BiPlus}
+      />
     );
 
   return (
     <>
-      <div className="flex-1 overflow-auto px-6">
+      <div className="flex-1 overflow-auto px-6 relative">
         <div className="py-6 flex items-center gap-4">
           <Badge className="py-2 bg-accent/10 text-accent" variant="secondary">
             Total rooms: {rooms.length}
@@ -169,20 +88,20 @@ export default function TableDemo() {
           {/* Table Header */}
           <thead className="bg-background border-b sticky top-0 py-1">
             <tr>
-              <th className="w-44 py-2 text-left font-medium text-muted-foreground">
+              <th className="w-24 py-2 text-left font-medium text-muted-foreground">
+                Floor
+              </th>
+              <th className="w-24 py-2 text-left font-medium text-muted-foreground">
                 Room No.
               </th>
               <th className="w-64 py-2 text-left font-medium text-muted-foreground">
                 Category
               </th>
               <th className="w-40 py-2 text-left font-medium text-muted-foreground">
-                Floor
-              </th>
-              <th className="w-40 py-2 text-left font-medium text-muted-foreground">
                 Status
               </th>
               <th className="w-40 py-2 text-left font-medium text-muted-foreground">
-                Issues
+                Last updated
               </th>
               <th className="flex-1 py-2 text-left font-medium text-muted-foreground">
                 Action
@@ -198,17 +117,19 @@ export default function TableDemo() {
 
           {/* Table Body */}
           <tbody>
-            {currentInvoices.length > 0 ? (
-              currentInvoices.map((room, index) => (
+            {displayedRooms.length > 0 ? (
+              displayedRooms.map((room, index) => (
                 <tr
                   key={index}
                   className="border-b hover:bg-muted-foreground/5 text-sm"
                 >
-                  <td className="w-44 py-4">{room.room}</td>
-                  <td className="w-64 py-4">Guest {room.room.slice(-3)}</td>
-                  <td className="w-40 py-4">{room.paymentStatus}</td>
-                  <td className="w-40 py-4">{room.paymentMethod}</td>
-                  <td className="w-56 py-4">2</td>
+                  <td className="w-24 py-4">{room.floor.name}</td>
+                  <td className="w-24 py-4">{room.roomNumber}</td>
+                  <td className="w-56 py-4 line-clamp-1">{room.roomClass.title}</td>
+                  <td className="w-40 py-4">{room.roomStatus}</td>
+                  <td className="w-40 py-4">
+                    {formatDistanceToNow(room.updatedAt, { addSuffix: true })}
+                  </td>
                   <td colSpan={2} className="flex-1 py-4">
                     view
                   </td>
@@ -226,26 +147,47 @@ export default function TableDemo() {
             )}
           </tbody>
         </table>
-        <div className="py-4 flex justify-end gap-4 items-center mt-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={prevPage}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </Button>
-          <span className="text-sm text-muted-foreground w-32 text-center">
-            Page {currentPage} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={nextPage}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </Button>
+
+        {/* Pagination */}
+        <div className="py-4 flex justify-end gap-4 items-center mt-4 absolute bottom-0 left-0 w-full bg-card shadow-md">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePreviousPage();
+                  }}
+                />
+              </PaginationItem>
+
+              {[...Array(totalPages).keys()].map((page) => (
+                <PaginationItem key={page + 1}>
+                  <PaginationLink
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(page + 1);
+                    }}
+                    className={currentPage === page + 1 ? "bg-accent/20" : ""}
+                  >
+                    {page + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNextPage();
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
     </>

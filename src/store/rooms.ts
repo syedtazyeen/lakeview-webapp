@@ -5,6 +5,9 @@ interface RoomStore {
   setCategories: (val: RoomClass[]) => void;
   addCategory: (val: RoomClass) => void;
   removeCategory: (val: RoomClass) => void;
+  rooms: Room[];
+  setRooms: (val: Room[]) => void;
+  addRoom: (val: Room) => void;
   floors: Floor[];
   setFloors: (val: Floor[]) => void;
   addFloor: (val: Floor) => void;
@@ -21,6 +24,9 @@ const useRoomStore = create<RoomStore>((set) => ({
     set((state) => ({
       categories: state.categories.filter((item) => item !== category),
     })),
+  rooms: [],
+  setRooms: (rooms) => set({ rooms }),
+  addRoom: (room) => set((state) => ({ rooms: [...state.rooms, room] })),
   floors: [],
   setFloors: (floors) => set({ floors }),
   addFloor: (floor) => set((state) => ({ floors: [...state.floors, floor] })),

@@ -17,7 +17,7 @@ export default function DashboardLayout({
         <Sidebar expanded={expanded} setExpanded={(val) => setExpanded(val)} />
         <div
           className={`p-2 ${
-            expanded ? "ml-56" : "ml-14"
+            expanded ? "ml-56" : "ml-16"
           } h-full transition-all duration-300 ease-in-out`}
         >
           {children}
