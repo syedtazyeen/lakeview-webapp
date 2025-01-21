@@ -6,6 +6,7 @@ import LOTTIE_UPLOAD from "@/assets/lotties/cloud-upload.json";
 import { usePathname, useRouter } from "next/navigation";
 import { createRoomClass } from "@/api/room-classes";
 import { useToast } from "@/hooks/use-toast";
+import useRoomStore from "@/store/rooms";
 
 interface Props {
   step: number;
@@ -17,6 +18,7 @@ export default function Step4({ step, setStep, data }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const { toast } = useToast();
+  const { addCategory } = useRoomStore();
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -34,6 +36,11 @@ export default function Step4({ step, setStep, data }: Props) {
         features: data.features,
         bedTypes: [data.bedTypes],
       });
+      addCategory(res.data);
+      toast({
+        title: "Room category saved",
+        variant: "success",
+      });
       router.push(pathname);
     } catch (error) {
       setStep(step - 1);
@@ -46,11 +53,6 @@ export default function Step4({ step, setStep, data }: Props) {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    console.log(data);
-    createRoomCategory();
-  }, []);
 
   return (
     <div className="w-fit m-auto py-8 flex flex-col items-center">

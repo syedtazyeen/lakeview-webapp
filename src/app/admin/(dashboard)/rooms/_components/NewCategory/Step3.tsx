@@ -23,7 +23,7 @@ export default function Step3({ step, setStep, data, saveData }: Props) {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const validateImages = (files: FileList | null) => {
+  const validateImages = (files: File[] | null) => {
     if (!files || files.length === 0) {
       setErrors((prev) => ({ ...prev, images: "Images are required" }));
       return false;
@@ -48,13 +48,14 @@ export default function Step3({ step, setStep, data, saveData }: Props) {
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
-    if (files && validateImages(files)) {
+    if (files) {
       const newImages = Array.from(files);
       setImages((prevImages) => [...prevImages, ...newImages]);
     }
   }
 
   function onSubmit() {
+    validateImages(images);
     setIsLoading(true);
     saveData({ images });
     setStep(step + 1);

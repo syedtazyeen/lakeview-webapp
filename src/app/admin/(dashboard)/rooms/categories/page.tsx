@@ -1,46 +1,43 @@
 "use client";
 
 import { getRoomClasses } from "@/api/room-classes";
+import TabError from "@/components/common/tab-error";
+import TabLoader from "@/components/common/tab-loader";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState, useTransition } from "react";
-import { BiLoaderAlt, BiPlus, BiSolidBookContent } from "react-icons/bi";
+import { useApi } from "@/hooks/use-api";
+import { formatEnumString } from "@/lib/utils";
+import useRoomStore from "@/store/rooms";
+import { useRouter } from "next/navigation";
+import React, { useLayoutEffect } from "react";
+import {
+  BiBed,
+  BiGroup,
+  BiLoaderAlt,
+  BiPlus,
+  BiSolidBookContent,
+} from "react-icons/bi";
+import ViewCategory from "../_components/ViewCategory";
 
 export default function Categories() {
-  const [categories, setCategories] = useState<RoomClass[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const { categories, setCategories } = useRoomStore();
+  const { data, isLoading, error } = useApi(getRoomClasses);
 
-  async function fetchCategories() {
-    try {
-      setLoading(true);
-      const res = await getRoomClasses();
-      setCategories(res.data);
-    } catch (error) {
-      console.log(error);
-      setCategories([]);
-    } finally {
-      setLoading(false);
+  useLayoutEffect(() => {
+    if (data) {
+      setCategories(data.data);
     }
-  }
+  }, [data]);
 
-  useEffect(() => {
-    startTransition(() => {
-      fetchCategories();
-    });
-  }, []);
+  if (isLoading) return <TabLoader />;
 
-  if (loading)
-    return (
-      <div className="w-full flex gap-2 items-center py-16 justify-center text-accent">
-        <BiLoaderAlt className="animate-spin text-2xl" />
-        <span className="text-sm font-medium translate-y-[1px]">Loading</span>
-      </div>
-    );
+  if (error) return <TabError />;
 
   if (categories.length === 0)
     return (
       <div className="bg-background-base max-w-[40rem] aspect-[7/2] my-6 mx-auto p-4 rounded-xl space-y-1 overflow-x-hidden">
-        {isPending ? (
+        {isLoading ? (
           <p className="font-medium text-lg">Loading categories...</p>
         ) : (
           <>
@@ -68,13 +65,49 @@ export default function Categories() {
     );
 
   return (
-    <div className="flex flex-wrap gap-4 p-6">
+    <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 p-4 max-w-[2560px]">
+      <ViewCategory />
       {categories.map((category, index) => (
         <div
           key={index}
-          className="bg-card shadow-md border rounded-xl aspect-video h-32"
+          onClick={() =>
+            router.push("/admin/rooms/categories?view=" + category.id)
+          }
+          className="p-2 flex flex-col rounded-xl cursor-pointer border border-transparent hover:border-border group transition-colors duration-300"
         >
-          {category.title}
+          <div className="w-full aspect-square rounded-xl overflow-hidden">
+            <img
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              src="https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg"
+            />
+          </div>
+          <div className="">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="flex items-center gap-1 py-1">
+                <BiGroup className="text-base" />
+                <span className="mt-0.5">{category.maxGuestCount}</span>
+              </Badge>
+              <Badge variant="outline" className="flex items-center gap-1 py-1">
+                <BiBed className="text-base" />
+                <span className="mt-0.5">
+                  {category.bedTypes.map((bedType, index) =>
+                    index > 0 ? ", " : "" + formatEnumString(bedType)
+                  )}
+                </span>
+              </Badge>
+            </div>
+            <p className="font-medium">{category.title}</p>
+            <p className="text-sm text-muted-foreground line-clamp-1">
+              {category.description}
+            </p>
+            <p className="font-medium">
+              ₹{" "}
+              {new Intl.NumberFormat("en-IN", {
+                maximumFractionDigits: 2,
+              }).format(category.basePrice)}{" "}
+              <span className="font-normal text-sm">night</span>
+            </p>
+          </div>
         </div>
       ))}
     </div>
