@@ -5,13 +5,15 @@ interface Props {
   placeholder?: string;
 }
 
-export default function TabLoader({ placeholder = "Loading" }: Props) {
+export default function TabLoader({
+  placeholder = "Loading your info..",
+}: Props) {
   return (
-    <div className="w-full flex gap-2 items-center py-16 justify-center text-accent">
-      <BiLoaderAlt className="animate-spin text-2xl" />
-      <span className="text-sm font-medium">
-        {placeholder}
+    <div className="w-full flex flex-col gap-2 items-center py-16 justify-center text-accent">
+      <span className="p-1 rounded-lg bg-accent">
+        <BiLoaderAlt className="animate-spin duration-300 text-3xl text-background" />
       </span>
+      <span className="text-sm font-medium">{placeholder}</span>
     </div>
   );
 }

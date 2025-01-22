@@ -10,7 +10,7 @@ import ViewCategory from "../_components/ViewCategory";
 import { useFloorsLoader } from "@/loaders/room";
 
 export default function Categories() {
-  const pathname= usePathname()
+  const pathname = usePathname();
   const router = useRouter();
   const { floors, isLoading, error } = useFloorsLoader();
 
@@ -27,7 +27,10 @@ export default function Categories() {
         enhancing the overall functionality of the space."
         button1={{ label: "Learn" }}
         button1Icon={BiSolidBookContent}
-        button2={{ label: "Add floor", onClick : ()=> router.push(`${pathname}?tab=new`) }}
+        button2={{
+          label: "Add floor",
+          onClick: () => router.push(`${pathname}?tab=new`),
+        }}
         button2Icon={BiPlus}
       />
     );
@@ -35,15 +38,6 @@ export default function Categories() {
   return (
     <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 p-4 max-w-[2560px]">
       <ViewCategory />
-      {floors.map((floor, index) => (
-        <div
-          key={index}
-          onClick={() => router.push("/admin/rooms/floors?view=" + floor.id)}
-          className="p-2 flex flex-col rounded-xl cursor-pointer bg-card shadow-md border border-transparent hover:border-border group transition-colors duration-300"
-        >
-          {floor.name}
-        </div>
-      ))}
     </div>
   );
 }

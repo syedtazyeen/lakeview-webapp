@@ -154,7 +154,7 @@ export default function TableDemo() {
   return (
     <>
       <div className="flex-1 overflow-auto px-6">
-        <div className="py-4 flex items-center gap-4">
+        <div className="py-8 flex items-center gap-4">
           <Badge className="py-2" variant="secondary">
             Total bookings: {rooms.length}
           </Badge>
@@ -171,7 +171,7 @@ export default function TableDemo() {
             Check-ins open: {rooms.length}
           </Badge>
         </div>
-        <table className="w-full min-w-[1080px] mt-4 table-auto text-sm">
+        <table className="w-full min-w-[1080px] table-auto text-sm">
           {/* Table Header */}
           <thead className="bg-background border-b sticky top-0 py-1">
             <tr>

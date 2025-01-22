@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 
-export function useApi<T>(apiCall: () => Promise<T>) {
+export function useApi<T>(apiCall: () => Promise<T>, call: boolean = true) {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!call) return;
+
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);

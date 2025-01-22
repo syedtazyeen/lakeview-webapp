@@ -9,7 +9,7 @@ export default function RoomsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-background w-full h-full flex flex-col rounded-xl shadow-md overflow-auto">
+    <div className="w-full h-full flex flex-col">
       <div className="px-6 py-4 bg-background border-b">
         <div className="flex justify-between items-center h-8">
           <p className="font-medium text-xl flex items-center gap-2.5 w-40">

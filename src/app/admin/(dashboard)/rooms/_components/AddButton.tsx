@@ -1,10 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import React from "react";;
-import NewRoom from "./NewRoom";
-import NewCategory from "./NewCategory";
-import NewFloor from "./NewFloor";
+import React from "react";
+import NewRoom from "./query-tabs/add-room";
+import NewCategory from "./query-tabs/add-category";
 
 export default function AddButton() {
   const pathname = usePathname();
@@ -12,8 +11,6 @@ export default function AddButton() {
   if (pathname.endsWith("/rooms")) return <NewRoom />;
 
   if (pathname.endsWith("/rooms/categories")) return <NewCategory />;
-
-  if (pathname.endsWith("/rooms/floors")) return <NewFloor />;
 
   return <></>;
 }

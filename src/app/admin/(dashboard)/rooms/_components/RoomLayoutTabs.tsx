@@ -1,25 +1,25 @@
 "use client";
-import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
+import { usePathname, useRouter } from "next/navigation";
+import React from "react";
 
-interface TabProps {
+interface RoomLayoutTabProps {
   label: string;
   path: string;
   active?: boolean;
 }
 
-const list: TabProps[] = [
+const list: RoomLayoutTabProps[] = [
   { label: "All rooms", path: "" },
   { label: "Categories", path: "categories" },
-  { label: "Floors", path: "floors" },
+  { label: "Floors", path: "?tab=floors" },
 ];
 
-export default function Tabs() {
+export default function RoomLayoutTabs() {
   const pathname = usePathname();
   return (
     <div className="flex gap-6">
       {list.map((item, index) => (
-        <TabItem
+        <RoomLayoutTabItem
           key={index}
           active={
             item.path === ""
@@ -33,7 +33,7 @@ export default function Tabs() {
   );
 }
 
-function TabItem({ active, label, path }: TabProps) {
+function RoomLayoutTabItem({ active, label, path }: RoomLayoutTabProps) {
   const router = useRouter();
   const twClass = active
     ? "py-1.5 text-sm font-medium border-b-2 border-accent w-fit"

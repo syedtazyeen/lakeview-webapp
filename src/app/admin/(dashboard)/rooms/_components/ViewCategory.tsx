@@ -40,19 +40,6 @@ export default function ViewCategory() {
             </DrawerTitle>
             <DrawerDescription>{view}</DrawerDescription>
           </DrawerHeader>
-          {/* <div className="h-80 p-4 pb-0 flex flex-col">
-            <Label>Step {stage} of 3</Label>
-            <div className="relative mt-2 mb-8 w-full h-2 rounded-xl bg-muted-foreground/10 overflow-hidden">
-              <div
-                style={{ width: `${(stage / 4) * 100 - 5}%` }}
-                className={`absolute h-2 bg-accent rounded-xl transition-all duration-200`}
-              />
-            </div>
-            <div className="flex-1">{renderContent()}</div>
-          </div>
-          <DrawerFooter className="flex-row justify-end py-4">
-            {renderFooter()}
-          </DrawerFooter> */}
         </div>
       </DrawerContent>
     </Drawer>

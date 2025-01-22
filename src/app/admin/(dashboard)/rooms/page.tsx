@@ -7,22 +7,37 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { formatDistanceToNow } from "date-fns";
-import { BiFilter, BiPlus, BiSolidBookContent } from "react-icons/bi";
+import { BiBed, BiFilter, BiPlus, BiSolidBookContent } from "react-icons/bi";
 import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import TabLoader from "@/components/common/tab-loader";
 import TabError from "@/components/common/tab-error";
-import { useRoomsLoader } from "@/loaders/room";
 import TabEmpty from "@/components/common/tab-empty";
+import { useFloorsLoader, useRoomsLoader } from "@/loaders/room";
+import { GrServices } from "react-icons/gr";
+import { LucideDoorOpen } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import ViewFloors from "./_components/query-tabs/ViewFloors";
+import AddFloor from "./_components/query-tabs/AddFloor";
 
 export default function Rooms() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
+  const searchTab = searchParams.get("tab") || "";
   const { rooms, isLoading, error } = useRoomsLoader();
 
   const filteredRooms = rooms.filter((room) =>
@@ -32,7 +47,7 @@ export default function Rooms() {
   );
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 15;
 
   const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
 
@@ -52,6 +67,28 @@ export default function Rooms() {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  function handleFloorTab(val: boolean) {
+    const params = new URLSearchParams(window.location.search);
+    if (val) {
+      params.set("tab", "floor");
+    } else {
+      params.delete("tab");
+    }
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    router.push(newUrl);
+  }
+
+  function handleNewFloorTab(val: boolean) {
+    const params = new URLSearchParams(window.location.search);
+    if (val) {
+      params.set("tab", "new-floor");
+    } else {
+      params.delete("tab");
+    }
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    router.push(newUrl);
+  }
 
   if (isLoading) return <TabLoader />;
 
@@ -76,20 +113,39 @@ export default function Rooms() {
 
   return (
     <>
-      <div className="flex-1 overflow-auto px-6 relative">
-        <div className="py-6 flex items-center gap-4">
-          <Badge className="py-2 bg-accent/10 text-accent" variant="secondary">
-            Total rooms: {rooms.length}
-          </Badge>
-          <Badge
-            className="py-2 bg-green-500/10 text-green-700"
-            variant="secondary"
-          >
-            Vacant rooms: {rooms.length}
-          </Badge>
+      <div className="flex-1 overflow-auto px-6 space-y-10 relative">
+        <div className="flex items-center gap-4 mt-10">
+          <div className="relative flex flex-col p-3 h-28 space-y-1 aspect-video border shadow-sm rounded-lg">
+            <div className="w-2 h-2 rounded-full bg-accent" />
+            <p className="text-sm text-muted-foreground">Total rooms</p>
+            <p className="flex flex-1 items-end text-2xl font-medium">
+              {rooms.length}
+            </p>
+            <BiBed className="absolute right-4 bottom-4 text-2xl" />
+          </div>
+          <div className="relative flex flex-col p-3 h-28 space-y-1 aspect-video border shadow-sm rounded-lg">
+            <div className="w-2 h-2 rounded-full bg-green-600" />
+            <p className="text-sm text-muted-foreground">Vacant rooms</p>
+            <p className="flex flex-1 items-end text-2xl font-medium">
+              {rooms.filter((i) => i.roomStatus === "AVAILABLE").length}
+            </p>
+            <LucideDoorOpen className="absolute right-4 bottom-4 text-2xl" />
+          </div>
+          <div className="relative flex flex-col p-3 h-28 space-y-1 aspect-video border shadow-sm rounded-lg">
+            <div className="w-2 h-2 rounded-full bg-amber-600" />
+            <p className="text-sm text-muted-foreground">Out of service</p>
+            <p className="flex flex-1 items-end text-2xl font-medium">
+              {rooms.filter((i) => i.roomStatus !== "AVAILABLE").length}
+            </p>
+            <GrServices className="absolute right-4 bottom-4 text-2xl" />
+          </div>
         </div>
+
+        <ViewFloors rooms={rooms} />
+
+        <AddFloor/>
+
         <table className="w-full min-w-[1080px] table-auto text-sm">
-          {/* Table Header */}
           <thead className="bg-background border-b sticky top-0 py-1">
             <tr>
               <th className="w-24 py-2 text-left font-medium text-muted-foreground">
@@ -119,7 +175,6 @@ export default function Rooms() {
             </tr>
           </thead>
 
-          {/* Table Body */}
           <tbody>
             {displayedRooms.length > 0 ? (
               displayedRooms.map((room, index) => (
@@ -154,13 +209,12 @@ export default function Rooms() {
           </tbody>
         </table>
 
-        {/* Pagination */}
-        <div className="py-4 flex justify-end gap-4 items-center mt-4 absolute bottom-0 left-0 w-full bg-card shadow-md">
+        <div className="py-4">
           <Pagination>
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
-                  href="#"
+                  disabled={1 === currentPage}
                   onClick={(e) => {
                     e.preventDefault();
                     handlePreviousPage();
@@ -171,7 +225,6 @@ export default function Rooms() {
               {[...Array(totalPages).keys()].map((page) => (
                 <PaginationItem key={page + 1}>
                   <PaginationLink
-                    href="#"
                     onClick={(e) => {
                       e.preventDefault();
                       setCurrentPage(page + 1);
@@ -185,7 +238,7 @@ export default function Rooms() {
 
               <PaginationItem>
                 <PaginationNext
-                  href="#"
+                  disabled={totalPages === currentPage}
                   onClick={(e) => {
                     e.preventDefault();
                     handleNextPage();

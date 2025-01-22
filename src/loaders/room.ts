@@ -18,8 +18,8 @@ export const useRoomsLoader = () => {
   return { rooms, isLoading, error };
 };
 
-export const useFloorsLoader = () => {
-  const { data, isLoading, error } = useApi(getFloors);
+export const useFloorsLoader = (call: boolean = true) => {
+  const { data, isLoading, error } = useApi(getFloors, call);
   const { floors, setFloors } = useRoomStore();
 
   useEffect(() => {

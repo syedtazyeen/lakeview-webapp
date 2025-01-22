@@ -1,7 +1,17 @@
-import React from 'react'
+import Link from "next/link";
+import React from "react";
 
-export default function Logo() {
+interface Props {
+  href?: string;
+  size?: "sm" | "md" | "lg";
+}
+
+export default function Logo({ href = "/", size = "md" }: Props) {
   return (
-    <div>Logo</div>
-  )
+    <Link href={href}>
+      <div className="h-7 w-7 text-foreground">
+        <img className="w-full h-full" src="/logo.svg" />
+      </div>
+    </Link>
+  );
 }

@@ -1,49 +1,10 @@
 import Logo from "@/components/common/logo";
+import { COOKIES } from "@/lib/constants";
+import { deleteAppCookie } from "@/lib/cookies";
+import { sidebarMenu } from "@/lib/menu";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import {
-  BiArrowToLeft,
-  BiMenu,
-  BiSolidBed,
-  BiSolidBuildings,
-  BiSolidCalendar,
-  BiSolidCog,
-  BiSolidGroup,
-  BiSolidLayout,
-} from "react-icons/bi";
-
-const menuItems = [
-  {
-    label: "Dashboard",
-    icon: BiSolidLayout,
-    href: "/",
-  },
-  {
-    label: "Bookings",
-    icon: BiSolidCalendar,
-    href: "/bookings",
-  },
-  {
-    label: "Rooms",
-    icon: BiSolidBed,
-    href: "/rooms",
-  },
-  {
-    label: "Guests",
-    icon: BiSolidGroup,
-    href: "/guests",
-  },
-  {
-    label: "Settings",
-    icon: BiSolidCog,
-    href: "/settings",
-  },
-  {
-    label: "Hotel",
-    icon: BiSolidBuildings,
-    href: "/org",
-  },
-];
+import React from "react";
+import { BiLogOut } from "react-icons/bi";
 
 export default function Sidebar({
   expanded,
@@ -59,52 +20,67 @@ export default function Sidebar({
     router.push(`/admin${href}`);
   };
 
+  function handleLogout() {
+    deleteAppCookie(COOKIES.AUTH_TOKEN);
+    router.push("/admin");
+  }
+
   return (
     <div
+      onMouseEnter={() => setExpanded(true)}
+      onMouseLeave={() => setExpanded(false)}
       className={`${
-        expanded ? "w-52" : "w-14"
-      } fixed z-0 h-[calc(100%-1rem)] px-1.5 py-4 mt-2 gap-2 mx-2 overflow-hidden bg-background flex flex-col items-center rounded-2xl shadow-md transition-all duration-300 ease-in-out`}
+        expanded ? "w-48" : "w-14"
+      } fixed z-0 h-[calc(100%-1rem)] px-1.5 py-4 mt-2 gap-2 mx-1 overflow-hidden flex flex-col items-center rounded-2xl transition-all duration-300 ease-in-out`}
     >
-      <div className="flex flex-col items-start w-full px-2">
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className={`h-6 w-full flex items-center ${
-            expanded ? "justify-end" : "justify-center"
-          } rounded-full hover:text-accent mt-1 mb-10`}
-        >
-          {expanded ? (
-            <BiArrowToLeft className="text-xl" />
-          ) : (
-            <BiMenu className="text-2xl" />
-          )}
-        </button>
+      <div className="flex flex-col items-start w-full px-2 mb-10">
+        <Logo />
       </div>
 
-      {menuItems.map(({ icon: Icon, label, href }, index) => {
-        const isActive =
-          index === 0
-            ? pathname === "/admin"
-            : pathname.startsWith(`/admin${href}`);
+      <div className="flex-1 w-full space-y-1">
+        {sidebarMenu.map(({ icon: Icon, label, href }, index) => {
+          const isActive =
+            index === 0
+              ? pathname === "/admin"
+              : pathname.startsWith(`/admin${href}`);
 
-        return (
-          <div
-            key={index}
-            onClick={() => handleNavigation(href)}
-            className={`relative px-3 h-10 flex gap-2 justify-start items-center text-sm font-medium cursor-pointer w-full
-                 rounded-lg overflow-hidden
+          return (
+            <div
+              key={index}
+              onClick={() => handleNavigation(href)}
+              className={`relative px-[0.78rem] h-11 flex gap-2 items-center text-sm cursor-pointer w-full
+                 rounded-lg overflow-hidden border
                 ${
                   isActive
-                    ? "bg-accent text-accent-foreground shadow-sm"
-                    : ""
+                    ? "bg-background text-accent shadow-sm border-border"
+                    : "hover:bg-foreground/5 border-transparent"
                 } group transition-all duration-300 ease-in-out`}
-          >
-            <div className="w-fit flex items-center gap-2">
-              <Icon className="text-xl z-20 " />
-              <span className={expanded ? "translate-y-[1px]" : "hidden"}>{label}</span>
+            >
+              <div className="w-fit flex items-center gap-2">
+                <Icon className="text-lg z-20 " />
+                <span className={expanded ? "translate-y-[1px]" : "hidden"}>
+                  {label}
+                </span>
+              </div>
             </div>
+          );
+        })}
+      </div>
+
+      <div className="w-full space-y-1">
+        <div
+          className={`relative px-[0.78rem] h-11 flex gap-2 items-center cursor-pointer w-full
+            rounded-lg overflow-hidden border group transition-all duration-300 ease-in-out text-sm text-red-600 hover:bg-red-600/10`}
+          onClick={handleLogout}
+        >
+          <div className="w-fit flex items-center gap-2">
+            <BiLogOut className="text-lg z-20 " />
+            <span className={expanded ? "translate-y-[1px]" : "hidden"}>
+              Logout
+            </span>
           </div>
-        );
-      })}
+        </div>
+      </div>
     </div>
   );
 }

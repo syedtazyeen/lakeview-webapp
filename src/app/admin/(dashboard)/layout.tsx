@@ -17,10 +17,12 @@ export default function DashboardLayout({
         <Sidebar expanded={expanded} setExpanded={(val) => setExpanded(val)} />
         <div
           className={`p-2 ${
-            expanded ? "ml-56" : "ml-16"
+            expanded ? "ml-48" : "ml-14"
           } h-full transition-all duration-300 ease-in-out`}
         >
-          {children}
+          <div className="w-full h-full bg-background rounded-xl shadow-md overflow-auto">
+            {children}
+          </div>
         </div>
       </div>
     </TooltipProvider>
