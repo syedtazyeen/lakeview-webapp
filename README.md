@@ -1,6 +1,3 @@
-Here's the content you can directly copy into a `.md` file:
-
-```markdown
 # Lakeview Webapp
 
 Lakeview is a hotel booking platform with a booking management system, customer side functionality, and a dashboard. It includes rooms, categories and floors, guest directories, and profiles.
