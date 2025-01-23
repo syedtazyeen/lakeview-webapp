@@ -1,0 +1,47 @@
+name: Code Quality and Lint Check
+
+on:
+  push:
+    branches:
+      - main
+      - "**" # Run on all branches
+
+jobs:
+  check-code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js and Install Dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16" # specify your node version here
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Check for unused dependencies
+        run: |
+          npx depcheck
+
+      - name: Check for console statements
+        run: |
+          # Find any instances of console
+          if grep -r "console\.\(log\|error\|debug\|info\|warn\)" . --exclude-dir={node_modules,.git} --exclude={src/lib/logger.ts,.github/workflows/console_check.yml} | grep -v "src/lib/logger.ts"; then
+            echo "Console statements found in the code. Please remove them."
+            exit 1
+          else
+            echo "No console statements found. Proceeding with commit."
+          fi
+
+      - name: Run ESLint Check
+        run: |
+          npx eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore
+        continue-on-error: false # Stops the job if ESLint finds issues
+
+      - name: Check Cyclomatic Complexity
+        run: |
+          npx eslint --plugin complexity .
