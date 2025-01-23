@@ -1,0 +1,24 @@
+name: Console Statement Check
+
+on:
+  push:
+    branches:
+      - main
+      - "**" # Run on all branches
+
+jobs:
+  check-console-logs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Find console statements
+        run: |
+          # Find any instances of console
+          if grep -r "console\.\(log\|error\|debug\|info\|warn\)" . --exclude-dir={node_modules,.git} --exclude={src/lib/logger.ts,.github/workflows/console_check.yml} | grep -v "src/lib/logger.ts"; then
+            echo "Console statements found in the code. Please remove them."
+            exit 1
+          else
+            echo "No console statements found. Proceeding with commit."
+          fi
