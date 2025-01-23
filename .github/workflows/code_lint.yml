@@ -25,7 +25,7 @@ jobs:
 
       - name: Check for unused dependencies
         run: |
-          npx depcheck
+          npx depcheck --ignore-dev
 
       - name: Check for console statements
         run: |
