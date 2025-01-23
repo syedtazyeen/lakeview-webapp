@@ -19,7 +19,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import StatusBadge from "./_components/status-badge";
-import RoomsOverview from "./_components/rooms-overview";
+import Overview from "@/components/common/overview";
 
 export default function Rooms() {
   const pathname = usePathname();
@@ -80,11 +80,26 @@ export default function Rooms() {
   return (
     <>
       <div className="flex-1 overflow-auto space-y-10 relative">
-        <RoomsOverview
-          total={rooms.length}
-          available={rooms.filter((i) => i.roomStatus === "AVAILABLE").length}
-          out={rooms.filter((i) => i.roomStatus !== "AVAILABLE").length}
-        />
+        <div className="px-6 space-y-4 mt-8">
+          <p className="font-medium">Overview</p>
+          <div className="flex items-center gap-6">
+            <Overview
+              label={"Vacant"}
+              value={rooms.filter((i) => i.roomStatus === "AVAILABLE").length}
+              total={rooms.length}
+            />
+            <Overview
+              label={"Occupied"}
+              value={rooms.filter((i) => i.roomStatus === "AVAILABLE").length}
+              total={rooms.length}
+            />
+            <Overview
+              label={"Out of service"}
+              value={rooms.filter((i) => i.roomStatus !== "AVAILABLE").length}
+              total={rooms.length}
+            />
+          </div>
+        </div>
 
         <table className="w-full min-w-[1080px] table-auto text-sm">
           <thead className="bg-background border-b sticky top-0 py-1">

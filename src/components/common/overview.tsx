@@ -1,25 +1,5 @@
 import * as math from "mathjs";
-import React from "react";
 import { cn } from "@/lib/utils";
-
-interface Props {
-  total: number;
-  available: number;
-  out: number;
-}
-
-export default function RoomsOverview({ total, available, out }: Props) {
-  return (
-    <div className="px-6 space-y-4 mt-8">
-      <p className="font-medium">Overview</p>
-      <div className="flex items-center gap-6">
-        <Overview label={"Vacant"} value={available} total={total} />
-        <Overview label={"Occupied"} value={6} total={total} />
-        <Overview label={"Out of service"} value={out} total={total} />
-      </div>
-    </div>
-  );
-}
 
 interface IOverview {
   label: string;
@@ -27,9 +7,9 @@ interface IOverview {
   total: number;
 }
 
-function Overview({ label, value, total }: IOverview) {
+export default function Overview({ label, value, total }: IOverview) {
   const percentage = math.round((value / total) * 100, 1);
-  console.log(percentage);
+
   const color =
     percentage > 66
       ? "bg-green-500"

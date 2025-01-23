@@ -6,7 +6,7 @@ export default function StatusBadge({
   status,
   text,
 }: {
-  status: RoomStatus;
+  status: RoomStatusType;
   text?: string;
 }) {
   const variant = {
