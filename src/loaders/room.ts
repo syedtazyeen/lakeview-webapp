@@ -1,12 +1,12 @@
+import useRoomStore from "@/store/rooms";
 import { getFloors } from "@/api/floors";
 import { getRoomClasses } from "@/api/room-classes";
 import { getRooms } from "@/api/rooms";
 import { useApi } from "@/hooks/use-api";
-import useRoomStore from "@/store/rooms";
 import { useEffect } from "react";
 
-export const useRoomsLoader = () => {
-  const { data, isLoading, error } = useApi(getRooms);
+export const useRoomsLoader = (call: boolean = true) => {
+  const { data, isLoading, error } = useApi(getRooms, call);
   const { rooms, setRooms } = useRoomStore();
 
   useEffect(() => {
@@ -31,8 +31,8 @@ export const useFloorsLoader = (call: boolean = true) => {
   return { floors, isLoading, error };
 };
 
-export const useRoomClassesLoader = () => {
-  const { data, isLoading, error } = useApi(getRoomClasses);
+export const useRoomClassesLoader = (call: boolean = true) => {
+  const { data, isLoading, error } = useApi(getRoomClasses, call);
   const { categories, setCategories } = useRoomStore();
 
   useEffect(() => {

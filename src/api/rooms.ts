@@ -8,7 +8,7 @@ export async function getRooms() {
 }
 
 export async function getRoomById(roomId: string) {
-  return await axiosInstance.get<Floor>(`/${RESOURCE}/${roomId}`);
+  return await axiosInstance.get<Room>(`/${RESOURCE}/${roomId}`);
 }
 
 export async function createRoom(payload: RoomRequest) {

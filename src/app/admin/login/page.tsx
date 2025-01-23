@@ -51,7 +51,6 @@ export default function Login() {
         });
       } catch (error) {
         if (error instanceof AxiosError) {
-          console.log(error.message);
           const errMsg =
             error.status === 404 ? "User not found" : "Failed to login";
           toast({

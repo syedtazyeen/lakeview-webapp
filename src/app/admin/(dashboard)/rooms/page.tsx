@@ -1,4 +1,15 @@
 "use client";
+
+import TabEmpty from "@/components/common/tab-empty";
+import TabError from "@/components/common/tab-error";
+import TabLoader from "@/components/common/tab-loader";
+import { BiFilter, BiPlus, BiSolidBookContent } from "react-icons/bi";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import { MoreVertical } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRoomsLoader } from "@/loaders/room";
+import { useState } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -7,37 +18,14 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { formatDistanceToNow } from "date-fns";
-import { BiBed, BiFilter, BiPlus, BiSolidBookContent } from "react-icons/bi";
-import { useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import TabLoader from "@/components/common/tab-loader";
-import TabError from "@/components/common/tab-error";
-import TabEmpty from "@/components/common/tab-empty";
-import { useFloorsLoader, useRoomsLoader } from "@/loaders/room";
-import { GrServices } from "react-icons/gr";
-import { LucideDoorOpen } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import ViewFloors from "./_components/query-tabs/ViewFloors";
-import AddFloor from "./_components/query-tabs/AddFloor";
+import StatusBadge from "./_components/status-badge";
+import RoomsOverview from "./_components/rooms-overview";
 
 export default function Rooms() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
-  const searchTab = searchParams.get("tab") || "";
   const { rooms, isLoading, error } = useRoomsLoader();
 
   const filteredRooms = rooms.filter((room) =>
@@ -68,28 +56,6 @@ export default function Rooms() {
     }
   };
 
-  function handleFloorTab(val: boolean) {
-    const params = new URLSearchParams(window.location.search);
-    if (val) {
-      params.set("tab", "floor");
-    } else {
-      params.delete("tab");
-    }
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    router.push(newUrl);
-  }
-
-  function handleNewFloorTab(val: boolean) {
-    const params = new URLSearchParams(window.location.search);
-    if (val) {
-      params.set("tab", "new-floor");
-    } else {
-      params.delete("tab");
-    }
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    router.push(newUrl);
-  }
-
   if (isLoading) return <TabLoader />;
 
   if (error) return <TabError message={error} />;
@@ -113,60 +79,23 @@ export default function Rooms() {
 
   return (
     <>
-      <div className="flex-1 overflow-auto px-6 space-y-10 relative">
-        <div className="flex items-center gap-4 mt-10">
-          <div className="relative flex flex-col p-3 h-28 space-y-1 aspect-video border shadow-sm rounded-lg">
-            <div className="w-2 h-2 rounded-full bg-accent" />
-            <p className="text-sm text-muted-foreground">Total rooms</p>
-            <p className="flex flex-1 items-end text-2xl font-medium">
-              {rooms.length}
-            </p>
-            <BiBed className="absolute right-4 bottom-4 text-2xl" />
-          </div>
-          <div className="relative flex flex-col p-3 h-28 space-y-1 aspect-video border shadow-sm rounded-lg">
-            <div className="w-2 h-2 rounded-full bg-green-600" />
-            <p className="text-sm text-muted-foreground">Vacant rooms</p>
-            <p className="flex flex-1 items-end text-2xl font-medium">
-              {rooms.filter((i) => i.roomStatus === "AVAILABLE").length}
-            </p>
-            <LucideDoorOpen className="absolute right-4 bottom-4 text-2xl" />
-          </div>
-          <div className="relative flex flex-col p-3 h-28 space-y-1 aspect-video border shadow-sm rounded-lg">
-            <div className="w-2 h-2 rounded-full bg-amber-600" />
-            <p className="text-sm text-muted-foreground">Out of service</p>
-            <p className="flex flex-1 items-end text-2xl font-medium">
-              {rooms.filter((i) => i.roomStatus !== "AVAILABLE").length}
-            </p>
-            <GrServices className="absolute right-4 bottom-4 text-2xl" />
-          </div>
-        </div>
-
-        <ViewFloors rooms={rooms} />
-
-        <AddFloor/>
+      <div className="flex-1 overflow-auto space-y-10 relative">
+        <RoomsOverview
+          total={rooms.length}
+          available={rooms.filter((i) => i.roomStatus === "AVAILABLE").length}
+          out={rooms.filter((i) => i.roomStatus !== "AVAILABLE").length}
+        />
 
         <table className="w-full min-w-[1080px] table-auto text-sm">
           <thead className="bg-background border-b sticky top-0 py-1">
             <tr>
-              <th className="w-24 py-2 text-left font-medium text-muted-foreground">
-                Floor
-              </th>
-              <th className="w-24 py-2 text-left font-medium text-muted-foreground">
-                Room No.
-              </th>
-              <th className="w-64 py-2 text-left font-medium text-muted-foreground">
-                Category
-              </th>
-              <th className="w-40 py-2 text-left font-medium text-muted-foreground">
-                Status
-              </th>
-              <th className="w-40 py-2 text-left font-medium text-muted-foreground">
-                Last updated
-              </th>
-              <th className="flex-1 py-2 text-left font-medium text-muted-foreground">
-                Action
-              </th>
-              <th className="flex justify-end">
+              <th className="w-36 pl-6 py-2 text-left font-medium">Floor</th>
+              <th className="w-24 py-2 text-left font-medium">Room</th>
+              <th className="w-64 py-2 text-left font-medium">Category</th>
+              <th className="w-40 py-2 text-left font-medium">Status</th>
+              <th className="w-44 py-2 text-left font-medium">Updated at</th>
+              <th className="flex-1 py-2 text-left font-medium">Action</th>
+              <th className="flex pr-6 justify-end">
                 <Button size="sm" variant="outline" className="mx-4 my-1">
                   <BiFilter />
                   Filters
@@ -178,21 +107,20 @@ export default function Rooms() {
           <tbody>
             {displayedRooms.length > 0 ? (
               displayedRooms.map((room, index) => (
-                <tr
-                  key={index}
-                  className="border-b hover:bg-muted-foreground/5 text-sm"
-                >
-                  <td className="w-24 py-4">{room.floor.name}</td>
-                  <td className="w-24 py-4">{room.roomNumber}</td>
-                  <td className="w-56 py-4 line-clamp-1">
-                    {room.roomClass.title}
+                <tr key={index} className="border-b text-sm">
+                  <td className="w-36 pl-6 py-2">{room.floor.name}</td>
+                  <td className="w-24 py-2">{room.roomNumber}</td>
+                  <td className="w-56 py-2">{room.roomClass.title}</td>
+                  <td className="w-40 py-2">
+                    <StatusBadge status={room.roomStatus} />
                   </td>
-                  <td className="w-40 py-4">{room.roomStatus}</td>
-                  <td className="w-40 py-4">
-                    {formatDistanceToNow(room.updatedAt, { addSuffix: true })}
+                  <td className="w-44 py-2">
+                    {format(room.updatedAt, "dd/MM/yyyy, HH:mm")}
                   </td>
-                  <td colSpan={2} className="flex-1 py-4">
-                    view
+                  <td colSpan={2} className="flex-1 pr-6 py-2">
+                    <Button variant="outline" size="sm">
+                      <MoreVertical />
+                    </Button>
                   </td>
                 </tr>
               ))

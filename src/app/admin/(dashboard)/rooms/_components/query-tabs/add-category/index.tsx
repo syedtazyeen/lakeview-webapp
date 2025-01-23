@@ -1,4 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import Step1 from './step-1';
+import Step2 from './step-2';
+import Step3 from './step-3';
+import Step4 from './step-4';
+import useRoomStore from '@/store/rooms';
+import { BiBed, BiPlus } from 'react-icons/bi';
+import { Button } from '@/components/ui/button';
+import { createRoomClass } from '@/api/room-classes';
+import { Label } from '@/components/ui/label';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 import {
   Drawer,
   DrawerContent,
@@ -7,17 +18,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { BiBed, BiPlus } from "react-icons/bi";
-import { Label } from "@/components/ui/label";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import Step1 from "./Step1";
-import Step2 from "./Step2";
-import Step3 from "./Step3";
-import Step4 from "./Step4";
-import { useToast } from "@/hooks/use-toast";
-import useRoomStore from "@/store/rooms";
-import { createRoomClass } from "@/api/room-classes";
 
 export interface IData {
   title: string;

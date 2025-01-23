@@ -2,29 +2,29 @@
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
-interface RoomLayoutTabProps {
+interface LayoutTabProps {
   label: string;
   path: string;
   active?: boolean;
 }
 
-const list: RoomLayoutTabProps[] = [
-  { label: "All rooms", path: "" },
-  { label: "Categories", path: "categories" },
-  { label: "Floors", path: "?tab=floors" },
+const list: LayoutTabProps[] = [
+  { label: "All bookings", path: "" },
+  { label: "Pending", path: "categories" },
+  { label: "Completed", path: "?tab=floors" },
 ];
 
-export default function RoomLayoutTabs() {
+export default function LayoutTabs() {
   const pathname = usePathname();
   return (
     <div className="flex gap-6">
       {list.map((item, index) => (
-        <RoomLayoutTabItem
+        <LayoutTabItem
           key={index}
           active={
             item.path === ""
-              ? pathname.endsWith(`/rooms`)
-              : pathname.endsWith(`/rooms/${item.path}`)
+              ? pathname.endsWith(`/bookings`)
+              : pathname.endsWith(`/bookings/${item.path}`)
           }
           {...item}
         />
@@ -33,7 +33,7 @@ export default function RoomLayoutTabs() {
   );
 }
 
-function RoomLayoutTabItem({ active, label, path }: RoomLayoutTabProps) {
+function LayoutTabItem({ active, label, path }: LayoutTabProps) {
   const router = useRouter();
   const twClass = active
     ? "py-1.5 text-sm font-medium border-b-2 border-accent w-fit"

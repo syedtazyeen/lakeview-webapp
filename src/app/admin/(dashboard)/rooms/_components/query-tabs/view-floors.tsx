@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,15 +12,18 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { BiPlus } from "react-icons/bi";
-import { formatDistanceToNow } from "date-fns";
-import { useFloorsLoader } from "@/loaders/room";
+import { format, formatDistanceToNow } from "date-fns";
+import { useFloorsLoader, useRoomsLoader } from "@/loaders/room";
 import TabLoader from "@/components/common/tab-loader";
+import useRoomStore from "@/store/rooms";
 
-export default function ViewFloors({ rooms }: { rooms: Room[] }) {
+export default function ViewFloors() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { rooms, setRooms } = useRoomStore();
   const searchTab = searchParams.get("tab") || "";
   const { floors, isLoading } = useFloorsLoader(searchTab === "floors");
+  const { rooms: loadedRooms, isLoading: isRoomsLoading } = useRoomsLoader();
 
   function handleTab(val: string) {
     const params = new URLSearchParams(window.location.search);
@@ -30,6 +35,12 @@ export default function ViewFloors({ rooms }: { rooms: Room[] }) {
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     router.push(newUrl);
   }
+
+  useEffect(() => {
+    if (!floors) {
+      setRooms(loadedRooms);
+    }
+  }, [loadedRooms]);
 
   if (searchTab !== "floors") return;
 
@@ -44,21 +55,15 @@ export default function ViewFloors({ rooms }: { rooms: Room[] }) {
         </DialogHeader>
 
         <div className="flex-1 overflow-auto">
-          {isLoading ? (
+          {isLoading || isRoomsLoading ? (
             <TabLoader />
           ) : (
             <table className="w-full table-auto text-sm">
               <thead className="bg-background border-b sticky top-0">
                 <tr>
-                  <th className="py-2 text-left font-medium text-muted-foreground">
-                    Floor Name
-                  </th>
-                  <th className="py-2 text-left font-medium text-muted-foreground">
-                    Total Rooms
-                  </th>
-                  <th className="py-2 text-left font-medium text-muted-foreground">
-                    Last Updated
-                  </th>
+                  <th className="py-2 text-left font-medium">Floor</th>
+                  <th className="py-2 text-left font-medium">Rooms</th>
+                  <th className="py-2 text-left font-medium">Updated at</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,9 +80,7 @@ export default function ViewFloors({ rooms }: { rooms: Room[] }) {
                       }
                     </td>
                     <td className="py-3">
-                      {formatDistanceToNow(floor.updatedAt, {
-                        addSuffix: true,
-                      })}
+                      {format(floor.updatedAt, "dd/MM/yyyy, HH:mm")}
                     </td>
                   </tr>
                 ))}

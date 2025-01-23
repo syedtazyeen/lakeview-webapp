@@ -1,4 +1,16 @@
+"use client";
+
+import ErrorText from "@/components/common/error-text";
 import React, { useState } from "react";
+import useRoomStore from "@/store/rooms";
+import { Button } from "@/components/ui/button";
+import { createFloor } from "@/api/floors";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogClose,
@@ -8,16 +20,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
-import useRoomStore from "@/store/rooms";
-import { createFloor } from "@/api/floors";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import ErrorText from "@/components/common/error-text";
 
 const AddFloorSchema = z.object({
   name: z.string().min(1, "Floor name is required"),
@@ -99,7 +101,7 @@ export default function AddFloor() {
           <ErrorText {...errors.name} />
         </div>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="outline">Discard</Button>
           </DialogClose>
           <Button onClick={handleSubmit(onSubmit)} disabled={submitting}>

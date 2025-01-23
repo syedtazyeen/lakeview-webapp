@@ -3,17 +3,13 @@
 import React from "react";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { BiBed, BiPlus } from "react-icons/bi";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { BiBed } from "react-icons/bi";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ViewCategory() {
   const router = useRouter();

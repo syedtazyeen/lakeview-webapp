@@ -5,6 +5,7 @@ import { sidebarMenu } from "@/lib/menu";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { BiLogOut } from "react-icons/bi";
+import { ThemeToggle } from "./theme-toggle";
 
 export default function Sidebar({
   expanded,
@@ -52,7 +53,7 @@ export default function Sidebar({
                  rounded-lg overflow-hidden border
                 ${
                   isActive
-                    ? "bg-background text-accent shadow-sm border-border"
+                    ? "bg-background dark:bg-accent text-accent dark:text-foreground shadow-sm border-border"
                     : "hover:bg-foreground/5 border-transparent"
                 } group transition-all duration-300 ease-in-out`}
             >
@@ -68,6 +69,7 @@ export default function Sidebar({
       </div>
 
       <div className="w-full space-y-1">
+        <ThemeToggle expanded={expanded} />
         <div
           className={`relative px-[0.78rem] h-11 flex gap-2 items-center cursor-pointer w-full
             rounded-lg overflow-hidden border group transition-all duration-300 ease-in-out text-sm text-red-600 hover:bg-red-600/10`}

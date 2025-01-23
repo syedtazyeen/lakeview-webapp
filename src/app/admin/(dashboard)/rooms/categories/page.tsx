@@ -1,15 +1,15 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import React from "react";
-import { BiBed, BiGroup, BiPlus, BiSolidBookContent } from "react-icons/bi";
 import TabEmpty from "@/components/common/tab-empty";
 import TabError from "@/components/common/tab-error";
 import TabLoader from "@/components/common/tab-loader";
+import ViewCategory from "../_components/view-category";
 import { Badge } from "@/components/ui/badge";
+import { BiBed, BiGroup, BiPlus, BiSolidBookContent } from "react-icons/bi";
 import { formatEnumString } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 import { useRoomClassesLoader } from "@/loaders/room";
-import ViewCategory from "../_components/ViewCategory";
 
 export default function Categories() {
   const pathname = usePathname();

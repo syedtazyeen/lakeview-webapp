@@ -2,7 +2,7 @@
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import React, { useState } from "react";
-import Sidebar from "./_components/Sidebar";
+import Sidebar from "./_components/sidebar";
 
 export default function DashboardLayout({
   children,

@@ -1,4 +1,17 @@
 import React, { useEffect, useState } from "react";
+import Step1 from "./step-1";
+import Step2 from "./step-2";
+import Step3 from "./step-3";
+import Step4 from "./step-4";
+import TabLoader from "@/components/common/tab-loader";
+import useRoomStore from "@/store/rooms";
+import { BiBed, BiPlus } from "react-icons/bi";
+import { Button } from "@/components/ui/button";
+import { createRoom } from "@/api/rooms";
+import { Label } from "@/components/ui/label";
+import { useFloorsLoader, useRoomClassesLoader } from "@/loaders/room";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 import {
   Drawer,
   DrawerContent,
@@ -7,19 +20,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { BiBed, BiPlus } from "react-icons/bi";
-import { Label } from "@/components/ui/label";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import Step1 from "./Step1";
-import Step2 from "./Step2";
-import Step3 from "./Step3";
-import Step4 from "./Step4";
-import { useFloorsLoader, useRoomClassesLoader } from "@/loaders/room";
-import TabLoader from "@/components/common/tab-loader";
-import { useToast } from "@/hooks/use-toast";
-import useRoomStore from "@/store/rooms";
-import { createRoom } from "@/api/rooms";
+import { Progress } from "@/components/ui/progress";
 
 export interface IData {
   categoryId?: string;
@@ -121,6 +122,8 @@ export default function NewRoom() {
         description: "All rooms have been created.",
         variant: "success",
       });
+      setStep(1);
+      setData(initialData);
       router.push(pathname);
     } catch (error) {
       toast({
@@ -171,13 +174,14 @@ export default function NewRoom() {
               </DrawerDescription>
               {!floorsLoading && !categoriesLoading && step < 4 && (
                 <>
-                  <Label className="mt-2">Step {step} of 3</Label>
-                  <div className="relative mt-2 mb-4 w-full h-2 rounded-xl bg-muted-foreground/10 overflow-hidden">
+                  <Label className="mt-2 mb-0.5">Step {step} of 3</Label>
+                  {/* <div className="relative mt-2 mb-4 w-full h-2 rounded-xl bg-muted-foreground/10 overflow-hidden">
                     <div
                       style={{ width: `${(step / 4) * 100}%` }}
                       className={`absolute h-2 bg-accent rounded-xl transition-all duration-200`}
                     />
-                  </div>
+                  </div> */}
+                  <Progress value={(step / 4) * 100} className="h-2" />
                 </>
               )}
             </DrawerHeader>

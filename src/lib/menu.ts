@@ -5,6 +5,7 @@ import {
   BiSolidCog,
   BiSolidGroup,
   BiSolidLayout,
+  BiSolidReceipt,
 } from "react-icons/bi";
 
 export const sidebarMenu = [
@@ -27,6 +28,11 @@ export const sidebarMenu = [
     label: "Guests",
     icon: BiSolidGroup,
     href: "/guests",
+  },
+  {
+    label: "Invoices",
+    icon: BiSolidReceipt,
+    href: "/invoices",
   },
   {
     label: "Property",

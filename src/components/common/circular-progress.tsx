@@ -1,7 +1,7 @@
 import React from "react";
 
 const CircularProgress = ({ progress }: { progress: number }) => {
-    console.log(progress)
+
   const radius = 56;
   const stroke = 8;
   const normalizedRadius = radius - stroke / 2;

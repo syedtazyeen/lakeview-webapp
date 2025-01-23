@@ -1,8 +1,10 @@
 import React from "react";
 import { BiBed } from "react-icons/bi";
-import AddButton from "./_components/AddButton";
-import Search from "./_components/Search";
-import RoomLayoutTabs from "./_components/RoomLayoutTabs";
+import AddButton from "./_components/add-button";
+import LayoutTabs from "./_components/layout-tabs";
+import ViewFloors from "./_components/query-tabs/view-floors";
+import AddFloor from "./_components/query-tabs/add-floor";
+import Search from "@/components/common/search";
 
 export default function RoomsLayout({
   children,
@@ -11,10 +13,13 @@ export default function RoomsLayout({
 }>) {
   return (
     <div className=" w-full h-full flex flex-col">
+      <ViewFloors />
+      <AddFloor />
+
       <div className="px-6 pt-4 bg-background">
         <div className="flex justify-between items-center h-8">
-          <p className="font-medium text-xl flex items-center gap-2.5">
-            <BiBed className="mb-0.5" /> Rooms
+          <p className="font-medium flex items-center gap-2">
+            <BiBed className="mb-0.5 text-muted-foreground" /> Rooms
           </p>
           <div className="flex justify-end items-center gap-2">
             <Search />
@@ -25,7 +30,7 @@ export default function RoomsLayout({
         </div>
       </div>
       <div className="px-6 mt-2 border-b sticky top-0 z-10 bg-background">
-        <RoomLayoutTabs />
+        <LayoutTabs />
       </div>
       {children}
     </div>

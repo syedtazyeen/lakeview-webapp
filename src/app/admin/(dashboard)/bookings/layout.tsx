@@ -1,27 +1,31 @@
 import React from "react";
-import { BiCalendarAlt, BiPlus } from "react-icons/bi";
-import Search from "./_components/Search";
-import { Button } from "@/components/ui/button";
+import { BiCalendar } from "react-icons/bi";
+// import AddButton from "./_components/add-button";
+import LayoutTabs from "./_components/layout-tabs";
+import Search from "@/components/common/search";
 
 export default function RoomsLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <div className="w-full h-full flex flex-col">
-      <div className="px-6 py-4 bg-background border-b">
+    <div className=" w-full h-full flex flex-col">
+      <div className="px-6 pt-4 bg-background">
         <div className="flex justify-between items-center h-8">
-          <p className="font-medium text-xl flex items-center gap-2.5 w-40">
-            <BiCalendarAlt className="text-base" /> Bookings
+          <p className="font-medium flex items-center gap-2">
+            <BiCalendar className="mb-0.5 text-muted-foreground" /> Bookings
           </p>
-          <div className="flex items-center justify-end gap-2 w-40">
+          <div className="flex justify-end items-center gap-2">
             <Search />
-            <Button size="sm" className="flex items-center gap-1">
-              <BiPlus className="text-xl" /> New booking
-            </Button>
+            <div className="w-44 flex justify-end">
+              {/* <AddButton /> */}
+            </div>
           </div>
         </div>
+      </div>
+      <div className="px-6 mt-2 border-b sticky top-0 z-10 bg-background">
+        <LayoutTabs />
       </div>
       {children}
     </div>

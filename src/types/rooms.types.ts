@@ -1,4 +1,10 @@
-type RoomStatus = "AVAILABLE" | "MAINTENANCE" | "CLEANING";
+type RoomStatusType = "AVAILABLE" | "MAINTENANCE" | "CLEANING";
+
+enum RoomStatus {
+  AVAILABLE = "AVAILABLE",
+  MAINTENANCE = "MAINTENANCE",
+  CLEANING = "CLEANING",
+}
 
 type Room = {
   id: string;
@@ -9,12 +15,12 @@ type Room = {
   floor: Floor;
   roomClass: RoomClass;
   roomNumber: string;
-  roomStatus: RoomStatus;
+  roomStatus: RoomStatusType;
 };
 
 type RoomRequest = {
   floorId: string;
   roomClassId: string;
   roomNumber: string;
-  roomStatus: RoomStatus;
+  roomStatus: RoomStatusType;
 };
