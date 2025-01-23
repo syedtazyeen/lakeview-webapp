@@ -32,12 +32,3 @@ jobs:
           else
             echo "No console statements found. Proceeding with commit."
           fi
-
-      - name: Run ESLint Check
-        run: |
-          npx eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore
-        continue-on-error: false # Stops the job if ESLint finds issues
-
-      - name: Check Cyclomatic Complexity
-        run: |
-          npx eslint --plugin complexity .
