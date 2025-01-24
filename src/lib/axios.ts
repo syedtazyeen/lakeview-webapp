@@ -15,4 +15,14 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      Cookies.remove(COOKIES.AUTH_TOKEN);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default axiosInstance;

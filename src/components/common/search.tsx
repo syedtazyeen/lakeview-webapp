@@ -6,7 +6,6 @@ export default function Search() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
 
   useEffect(() => {
     const updateQueryParam = () => {
@@ -50,7 +49,7 @@ export default function Search() {
       </span>
       <input
         ref={inputRef}
-        placeholder={`Search ${isMac ? "(Cmd + K)]" : "(Ctrl + K)"}`}
+        placeholder={`Search`}
         className="flex-1 px-2 bg-transparent outline-none placeholder:translate-y-[1px]"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}

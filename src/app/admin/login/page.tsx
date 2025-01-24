@@ -15,6 +15,9 @@ import { COOKIES } from "@/lib/constants";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { BiLoaderAlt } from "react-icons/bi";
+import { cn } from "@/lib/utils";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -41,12 +44,12 @@ export default function Login() {
     startTransition(async () => {
       try {
         const res = await login(data);
+        setAppCookie(COOKIES.AUTH_TOKEN, res.data.token);
         setToken(res.data.token);
         setUser(res.data.user);
-        setAppCookie(COOKIES.AUTH_TOKEN, res.data.token);
-        router.push("/admin");
+        window.location.reload()
         toast({
-          title: "Login successfull",
+          title: "Logged in successfully",
           variant: "success",
         });
       } catch (error) {
@@ -59,7 +62,7 @@ export default function Login() {
           });
         } else
           toast({
-            title: "Login failed",
+            title: "Failed to login",
             variant: "destructive",
           });
       }
@@ -74,12 +77,12 @@ export default function Login() {
       <div className="w-full max-w-96 p-8 rounded-xl flex flex-col items-center gap-4">
         <div className="relative mb-8 flex items-center">
           <p className="font-semibold text-3xl">Welcome</p>
-          <p className="absolute -top-2 -right-12 text-xs font-medium bg-amber-100 text-amber-700 px-2 py-0.5 rounded-lg">
-            Admin
-          </p>
+          <div className="absolute -top-2 -right-16">
+            <Badge variant="outline">Admin</Badge>
+          </div>
         </div>
         <form
-          className="w-full flex flex-col gap-4"
+          className="w-full flex flex-col items-center gap-4"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="space-y-1 w-full">
@@ -105,8 +108,11 @@ export default function Login() {
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
           </div>
-          <div className="flex items-center gap-2">
-            <Checkbox id="terms" className="-translate-y-[1px] data-[state=checked]:border-accent data-[state=checked]:bg-accent" />
+          <div className="flex items-center gap-2 w-full">
+            <Checkbox
+              id="terms"
+              className="-translate-y-[1px] data-[state=checked]:border-accent data-[state=checked]:bg-accent"
+            />
             <label
               htmlFor="terms"
               className="text-sm peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -115,7 +121,11 @@ export default function Login() {
             </label>
           </div>
           <Button className="w-full mt-4" type="submit" disabled={isPending}>
-            {isPending ? "Logging in..." : "Log in"}
+            {isPending ? (
+              <BiLoaderAlt className="animate-spin text-xl" />
+            ) : (
+              "Log in"
+            )}
           </Button>
         </form>
         <Button variant="link" disabled={isPending}>

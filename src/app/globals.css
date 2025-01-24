@@ -1,42 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
-@font-face {
-  font-family: 'Graphik';
-  src: url('/fonts/Graphik-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Graphik';
-  src: url('/fonts/Graphik-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-}
-
-
-@font-face {
-  font-family: 'Graphik';
-  src: url('/fonts/Graphik-Semibold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-}
-
-
-@font-face {
-  font-family: 'Graphik';
-  src: url('/fonts/Graphik-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: "Graphik", serif;
+  font-family: "Noto Sans", serif;
 }
 
 @layer base {
@@ -56,6 +26,8 @@ body {
     --muted-foreground: 222 18% 51%;
     --accent: 226 100% 60%;
     --accent-foreground: 0 0% 99%;
+    --success: 120 70% 40.5%;
+    --success-foreground: 120 30% 95%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 222 18% 93%;
@@ -70,8 +42,8 @@ body {
   }
 
   .dark {
-    --background-base: 207 23% 10.5%;
-    --background: 207 23% 3.9%;
+    --background-base: 217 17% 10.5%;
+    --background: 207 23% 5.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -85,6 +57,8 @@ body {
     --muted-foreground: 0 0% 63.9%;
     --accent: 226 100% 60%;
     --accent-foreground: 0 0% 98%;
+    --success: 120 70% 30.5%;
+    --success-foreground: 120 30% 95%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;

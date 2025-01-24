@@ -5,6 +5,8 @@ import LayoutTabs from "./_components/layout-tabs";
 import ViewFloors from "./_components/query-tabs/view-floors";
 import AddFloor from "./_components/query-tabs/add-floor";
 import Search from "@/components/common/search";
+import NewRoom from "./_components/query-tabs/add-room";
+import NewCategory from "./_components/query-tabs/add-category";
 
 export default function RoomsLayout({
   children,
@@ -15,6 +17,8 @@ export default function RoomsLayout({
     <div className=" w-full h-full flex flex-col">
       <ViewFloors />
       <AddFloor />
+      <NewRoom />
+      <NewCategory />
 
       <div className="px-6 pt-4 bg-background">
         <div className="flex justify-between items-center h-8">

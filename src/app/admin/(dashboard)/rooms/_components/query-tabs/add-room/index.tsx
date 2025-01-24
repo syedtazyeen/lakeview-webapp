@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState } from "react";
 import Step1 from "./step-1";
 import Step2 from "./step-2";
@@ -5,8 +7,7 @@ import Step3 from "./step-3";
 import Step4 from "./step-4";
 import TabLoader from "@/components/common/tab-loader";
 import useRoomStore from "@/store/rooms";
-import { BiBed, BiPlus } from "react-icons/bi";
-import { Button } from "@/components/ui/button";
+import { BiBed } from "react-icons/bi";
 import { createRoom } from "@/api/rooms";
 import { Label } from "@/components/ui/label";
 import { useFloorsLoader, useRoomClassesLoader } from "@/loaders/room";
@@ -18,7 +19,6 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Progress } from "@/components/ui/progress";
 
@@ -140,7 +140,7 @@ export default function NewRoom() {
   function handleChange(val: boolean) {
     const params = new URLSearchParams(window.location.search);
     if (val) {
-      params.set("tab", "new");
+      params.set("tab", "new-rooms");
     } else {
       params.delete("tab");
     }
@@ -155,12 +155,7 @@ export default function NewRoom() {
   }, [step]);
 
   return (
-    <Drawer open={tab === "new"} onOpenChange={handleChange}>
-      <DrawerTrigger asChild>
-        <Button size="sm" className="flex items-center gap-1">
-          <BiPlus className="text-xl" /> New rooms
-        </Button>
-      </DrawerTrigger>
+    <Drawer open={tab === "new-rooms"} onOpenChange={handleChange}>
       <DrawerContent className="h-full">
         <div className="h-full overflow-auto">
           <div className="mx-auto w-full max-w-xl">

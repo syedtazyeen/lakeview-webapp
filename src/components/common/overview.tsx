@@ -8,7 +8,7 @@ interface IOverview {
 }
 
 export default function Overview({ label, value, total }: IOverview) {
-  const percentage = math.round((value / total) * 100, 1);
+  const percentage = value === 0 ? 0 : math.round((value / total) * 100, 1);
 
   const color =
     percentage > 66

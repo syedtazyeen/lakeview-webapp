@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast";
 import {
   Toast,
   ToastClose,
@@ -8,16 +8,32 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from "@/components/ui/toast"
+} from "@/components/ui/toast";
+import { BiCheckCircle, BiErrorCircle, BiInfoCircle } from "react-icons/bi";
 
 export function Toaster() {
-  const { toasts } = useToast()
+  const { toasts } = useToast();
+
+  const icon = {
+    success: BiCheckCircle,
+    destructive: BiErrorCircle,
+    default: BiInfoCircle,
+  };
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
+      {toasts.map(function ({
+        id,
+        title,
+        description,
+        action,
+        variant,
+        ...props
+      }) {
+        const Icon = variant ? icon[variant] : null;
         return (
-          <Toast key={id} {...props}>
+          <Toast key={id} variant={variant} {...props}>
+            {Icon && <Icon className="size-5" />}
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
@@ -27,9 +43,9 @@ export function Toaster() {
             {action}
             <ToastClose />
           </Toast>
-        )
+        );
       })}
       <ToastViewport />
     </ToastProvider>
-  )
+  );
 }

@@ -129,7 +129,7 @@ export default function Step3({ step, setStep, data, saveData }: Props) {
           {isLoading ? (
             <BiLoaderAlt className="animate-spin ease-linear" />
           ) : (
-            "Next"
+            "Upload"
           )}
         </Button>
       </div>

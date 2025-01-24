@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import Step1 from './step-1';
-import Step2 from './step-2';
-import Step3 from './step-3';
-import Step4 from './step-4';
-import useRoomStore from '@/store/rooms';
-import { BiBed, BiPlus } from 'react-icons/bi';
-import { Button } from '@/components/ui/button';
-import { createRoomClass } from '@/api/room-classes';
-import { Label } from '@/components/ui/label';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
+"use client";
+
+import React, { useEffect, useState } from "react";
+import Step1 from "./step-1";
+import Step2 from "./step-2";
+import Step3 from "./step-3";
+import Step4 from "./step-4";
+import useRoomStore from "@/store/rooms";
+import { BiBed, BiPlus } from "react-icons/bi";
+import { Button } from "@/components/ui/button";
+import { createRoomClass } from "@/api/room-classes";
+import { Label } from "@/components/ui/label";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 import {
   Drawer,
   DrawerContent,
@@ -109,7 +111,7 @@ export default function NewCategory() {
   function handleChange(val: boolean) {
     const params = new URLSearchParams(window.location.search);
     if (val) {
-      params.set("tab", "new");
+      params.set("tab", "new-category");
     } else {
       params.delete("tab");
     }
@@ -154,12 +156,7 @@ export default function NewCategory() {
   }, [step]);
 
   return (
-    <Drawer open={tab === "new"} onOpenChange={handleChange}>
-      <DrawerTrigger asChild>
-        <Button size="sm" className="flex items-center gap-1">
-          <BiPlus className="text-xl" /> New category
-        </Button>
-      </DrawerTrigger>
+    <Drawer open={tab === "new-category"} onOpenChange={handleChange}>
       <DrawerContent className="h-full">
         <div className="h-full overflow-auto">
           <div className="mx-auto w-full max-w-xl">

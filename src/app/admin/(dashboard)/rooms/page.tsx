@@ -10,16 +10,11 @@ import { MoreVertical } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useRoomsLoader } from "@/loaders/room";
 import { useState } from "react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import StatusBadge from "./_components/status-badge";
 import Overview from "@/components/common/overview";
+import PaginationBar from "@/components/common/pagination-bar";
+
+const PAGE_LIMIT = 15;
 
 export default function Rooms() {
   const pathname = usePathname();
@@ -35,26 +30,11 @@ export default function Rooms() {
   );
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15;
-
-  const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
 
   const displayedRooms = filteredRooms.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (currentPage - 1) * PAGE_LIMIT,
+    currentPage * PAGE_LIMIT
   );
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   if (isLoading) return <TabLoader />;
 
@@ -110,12 +90,6 @@ export default function Rooms() {
               <th className="w-40 py-2 text-left font-medium">Status</th>
               <th className="w-44 py-2 text-left font-medium">Updated at</th>
               <th className="flex-1 py-2 text-left font-medium">Action</th>
-              <th className="flex pr-6 justify-end">
-                <Button size="sm" variant="outline" className="mx-4 my-1">
-                  <BiFilter />
-                  Filters
-                </Button>
-              </th>
             </tr>
           </thead>
 
@@ -153,43 +127,12 @@ export default function Rooms() {
         </table>
 
         <div className="py-4">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  disabled={1 === currentPage}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handlePreviousPage();
-                  }}
-                />
-              </PaginationItem>
-
-              {[...Array(totalPages).keys()].map((page) => (
-                <PaginationItem key={page + 1}>
-                  <PaginationLink
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setCurrentPage(page + 1);
-                    }}
-                    className={currentPage === page + 1 ? "bg-accent/20" : ""}
-                  >
-                    {page + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-
-              <PaginationItem>
-                <PaginationNext
-                  disabled={totalPages === currentPage}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNextPage();
-                  }}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <PaginationBar
+            total={filteredRooms.length}
+            limit={PAGE_LIMIT}
+            currentPage={currentPage}
+            setCurrentPage={(val) => setCurrentPage(val)}
+          />
         </div>
       </div>
     </>

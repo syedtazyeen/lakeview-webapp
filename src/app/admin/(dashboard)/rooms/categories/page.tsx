@@ -1,20 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TabEmpty from "@/components/common/tab-empty";
 import TabError from "@/components/common/tab-error";
 import TabLoader from "@/components/common/tab-loader";
 import ViewCategory from "../_components/view-category";
-import { Badge } from "@/components/ui/badge";
-import { BiBed, BiGroup, BiPlus, BiSolidBookContent } from "react-icons/bi";
-import { formatEnumString } from "@/lib/utils";
+import { BiCheck, BiPlus, BiSolidBookContent } from "react-icons/bi";
 import { usePathname, useRouter } from "next/navigation";
-import { useRoomClassesLoader } from "@/loaders/room";
+import Overview from "@/components/common/overview";
+import { useRoomClassesLoader, useRoomsLoader } from "@/loaders/room";
+import { cn, formatEnumString } from "@/lib/utils";
+import NameCard from "./_components/name-card";
+import { Badge } from "@/components/ui/badge";
 
 export default function Categories() {
   const pathname = usePathname();
   const router = useRouter();
   const { categories, isLoading, error } = useRoomClassesLoader();
+  const { rooms } = useRoomsLoader();
+  const [filteredRooms, setFilteredRooms] = useState<Room[]>(rooms);
+  const [selectedCategory, setSelectedCategory] = useState<RoomClass>();
+
+  function handleSelectCategory(id?: string) {
+    if (id) {
+      setSelectedCategory(categories.find((cat) => cat.id === id));
+      setFilteredRooms(rooms.filter((rm) => rm.roomClass.id === id));
+    } else {
+      setSelectedCategory(undefined);
+      setFilteredRooms(rooms);
+    }
+  }
 
   if (isLoading) return <TabLoader />;
 
@@ -36,9 +51,105 @@ export default function Categories() {
     );
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 p-4 max-w-[2560px]">
-      <ViewCategory />
-      {categories.map((category, index) => (
+    <div className="flex-1 overflow-auto space-y-10 relative">
+      <div className="px-6 my-8 flex gap-6 overflow-x-auto select-none hide-scrollbar">
+        <NameCard
+          selected={!selectedCategory}
+          handleSelect={handleSelectCategory}
+        />
+        {categories.map((category, index) => (
+          <NameCard
+            key={index}
+            category={category}
+            selected={selectedCategory?.id === category.id}
+            handleSelect={handleSelectCategory}
+          />
+        ))}
+      </div>
+
+      <div className="px-6 max-w-[2200px] grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="w-full space-y-8">
+          <div className="space-y-4">
+            <p className="font-medium">Overview</p>
+            <div className="flex items-center gap-6">
+              <Overview
+                label={"Vacant"}
+                value={
+                  filteredRooms.filter((i) => i.roomStatus === "AVAILABLE")
+                    .length
+                }
+                total={filteredRooms.length}
+              />
+              <Overview
+                label={"Occupied"}
+                value={
+                  filteredRooms.filter((i) => i.roomStatus === "AVAILABLE")
+                    .length
+                }
+                total={filteredRooms.length}
+              />
+              <Overview
+                label={"Out of service"}
+                value={
+                  filteredRooms.filter((i) => i.roomStatus !== "AVAILABLE")
+                    .length
+                }
+                total={filteredRooms.length}
+              />
+            </div>
+          </div>
+
+          {selectedCategory && (
+            <>
+              <div className="space-y-2">
+                <p className="font-medium">Description</p>
+                <p className="max-w-xl text-sm">
+                  {selectedCategory.description}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <p className="font-medium">Amenities</p>
+                <div className="flex flex-wrap gap-4">
+                  {selectedCategory.features.map((ft, index) => (
+                    <Badge
+                      variant={"outline"}
+                      key={index}
+                      className={`py-1 text-sm font-normal cursor-pointer`}
+                    >
+                      {formatEnumString(ft)}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="w-full">
+          {selectedCategory && (
+            <div className="border rounded-xl w-full max-w-3xl mx-auto aspect-video flex overflow-hidden">
+              <div className="w-2/3 h-full">
+                <img
+                  className="h-full w-full object-cover"
+                  src="/images/picture-placeholder.png"
+                />
+              </div>
+              <div className="w-1/3 h-full flex flex-col">
+                <img
+                  className="w-full object-cover flex-1"
+                  src="/images/picture-placeholder.png"
+                />
+                <img
+                  className="w-full object-cover flex-1"
+                  src="/images/picture-placeholder.png"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* {categories.map((category, index) => (
         <div
           key={index}
           onClick={() =>
@@ -80,7 +191,8 @@ export default function Categories() {
             </p>
           </div>
         </div>
-      ))}
+      ))} */}
+      <ViewCategory />
     </div>
   );
 }
