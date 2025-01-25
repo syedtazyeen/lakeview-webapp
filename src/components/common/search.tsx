@@ -50,7 +50,7 @@ export default function Search() {
       <input
         ref={inputRef}
         placeholder={`Search`}
-        className="flex-1 px-2 bg-transparent outline-none placeholder:translate-y-[1px]"
+        className="flex-1 px-2 bg-transparent outline-none"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         aria-label="Search"

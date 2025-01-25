@@ -1,8 +1,27 @@
 import React from "react";
-import { BiCalendar } from "react-icons/bi";
-// import AddButton from "./_components/add-button";
-import LayoutTabs from "./_components/layout-tabs";
-import Search from "@/components/common/search";
+import { BiCalendar, BiPlus } from "react-icons/bi";
+import Header, { ActionProps, TabProps } from "@/components/common/header";
+
+const actions: ActionProps[] = [
+  {
+    label: "Add bookings",
+    icon: <BiPlus />,
+    query: "tab=new-bookings",
+    withPath: "/admin/bookings",
+  },
+  {
+    label: "Add category",
+    icon: <BiPlus />,
+    query: "tab=new-category",
+    withPath: "/admin/bookings/categories",
+  },
+];
+
+const tabs: TabProps[] = [
+  { name: "All bookings", path: "/admin/bookings" },
+  { name: "Open", path: "/admin/bookings/open" },
+  { name: "Completed", path: "/admin/bookings/completed" },
+];
 
 export default function RoomsLayout({
   children,
@@ -11,22 +30,13 @@ export default function RoomsLayout({
 }>) {
   return (
     <div className=" w-full h-full flex flex-col">
-      <div className="px-6 pt-4 bg-background">
-        <div className="flex justify-between items-center h-8">
-          <p className="font-medium flex items-center gap-2">
-            <BiCalendar className="mb-0.5 text-muted-foreground" /> Bookings
-          </p>
-          <div className="flex justify-end items-center gap-2">
-            <Search />
-            <div className="w-44 flex justify-end">
-              {/* <AddButton /> */}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="px-6 mt-2 border-b sticky top-0 z-10 bg-background">
-        <LayoutTabs />
-      </div>
+      <Header
+        icon={<BiCalendar />}
+        name={"Bookings"}
+        actions={actions}
+        tabs={tabs}
+        includeSearch
+      />
       {children}
     </div>
   );
