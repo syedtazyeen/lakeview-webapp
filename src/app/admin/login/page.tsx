@@ -3,7 +3,7 @@
 import Logo from "@/components/common/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState, useTransition } from "react";
+import React, { useTransition } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -13,11 +13,9 @@ import useAuthStore from "@/store/auth";
 import { setAppCookie } from "@/lib/cookies";
 import { COOKIES } from "@/lib/constants";
 import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { BiLoaderAlt } from "react-icons/bi";
-import { cn } from "@/lib/utils";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -27,7 +25,6 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const router = useRouter();
   const { setUser, setToken } = useAuthStore();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();

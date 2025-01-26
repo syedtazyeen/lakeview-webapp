@@ -6,7 +6,7 @@ interface Props {
   size?: "sm" | "md" | "lg";
 }
 
-export default function Logo({ href = "/", size = "md" }: Props) {
+export default function Logo({ href = "/" }: Props) {
   return (
     <Link href={href}>
       <div className="h-7 w-7 text-foreground">

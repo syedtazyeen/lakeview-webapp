@@ -1,9 +1,10 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import React from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { BiPlus } from "react-icons/bi";
+import { TABS } from "@/lib/constants";
 
 export default function AddButton() {
   const pathname = usePathname();
@@ -12,7 +13,7 @@ export default function AddButton() {
   if (pathname.endsWith("/rooms"))
     return (
       <Button
-        onClick={() => router.push(`${pathname}?tab=new-rooms`)}
+        onClick={() => router.push(`${pathname}?tab=${TABS.ROOMS.ADD_ROOMS}`)}
         size="sm"
         className="flex items-center gap-1"
       >
@@ -23,7 +24,9 @@ export default function AddButton() {
   if (pathname.endsWith("/rooms/categories"))
     return (
       <Button
-        onClick={() => router.push(`${pathname}?tab=new-category`)}
+        onClick={() =>
+          router.push(`${pathname}?tab=${TABS.ROOMS.ADD_CATEGORY}`)
+        }
         size="sm"
         className="flex items-center gap-1"
       >

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Step1 from "./step-1";
@@ -21,6 +21,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Progress } from "@/components/ui/progress";
+import { QUERIES, TABS } from "@/lib/constants";
 
 export interface IData {
   categoryId?: string;
@@ -42,7 +43,7 @@ export default function NewRoom() {
   const { isLoading: floorsLoading } = useFloorsLoader();
   const { isLoading: categoriesLoading } = useRoomClassesLoader();
 
-  const tab = searchParams.get("tab") || "";
+  const tab = searchParams.get(QUERIES.TAB) || "";
 
   function renderContent() {
     switch (step) {
@@ -125,7 +126,7 @@ export default function NewRoom() {
       setStep(1);
       setData(initialData);
       router.push(pathname);
-    } catch (error) {
+    } catch (_) {
       toast({
         title: "Error creating rooms",
         description: "An error occurred while creating the rooms.",
@@ -140,9 +141,9 @@ export default function NewRoom() {
   function handleChange(val: boolean) {
     const params = new URLSearchParams(window.location.search);
     if (val) {
-      params.set("tab", "new-rooms");
+      params.set(QUERIES.TAB, TABS.ROOMS.ADD_ROOMS);
     } else {
-      params.delete("tab");
+      params.delete(QUERIES.TAB);
     }
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     router.push(newUrl);
@@ -155,7 +156,7 @@ export default function NewRoom() {
   }, [step]);
 
   return (
-    <Drawer open={tab === "new-rooms"} onOpenChange={handleChange}>
+    <Drawer open={tab === TABS.ROOMS.ADD_ROOMS} onOpenChange={handleChange}>
       <DrawerContent className="h-full">
         <div className="h-full overflow-auto">
           <div className="mx-auto w-full max-w-xl">
@@ -170,12 +171,6 @@ export default function NewRoom() {
               {!floorsLoading && !categoriesLoading && step < 4 && (
                 <>
                   <Label className="mt-2 mb-0.5">Step {step} of 3</Label>
-                  {/* <div className="relative mt-2 mb-4 w-full h-2 rounded-xl bg-muted-foreground/10 overflow-hidden">
-                    <div
-                      style={{ width: `${(step / 4) * 100}%` }}
-                      className={`absolute h-2 bg-accent rounded-xl transition-all duration-200`}
-                    />
-                  </div> */}
                   <Progress value={(step / 4) * 100} className="h-2" />
                 </>
               )}
@@ -183,7 +178,7 @@ export default function NewRoom() {
             {floorsLoading || categoriesLoading ? (
               <TabLoader />
             ) : (
-              <div className="px-4 pb-4">{renderContent()}</div>
+              <div className="px-4 pb-4 min-h-56">{renderContent()}</div>
             )}
           </div>
         </div>

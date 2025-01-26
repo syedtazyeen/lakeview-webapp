@@ -20,6 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { QUERIES, TABS } from "@/lib/constants";
 
 const AddFloorSchema = z.object({
   name: z.string().min(1, "Floor name is required"),
@@ -30,7 +31,7 @@ type AddFloorFormValues = z.infer<typeof AddFloorSchema>;
 export default function AddFloor() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const searchTab = searchParams.get("tab") || "";
+  const searchTab = searchParams.get(QUERIES.TAB) || "";
 
   const { toast } = useToast();
   const { addFloor } = useRoomStore();
@@ -38,7 +39,6 @@ export default function AddFloor() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<AddFloorFormValues>({
     resolver: zodResolver(AddFloorSchema),
@@ -54,8 +54,8 @@ export default function AddFloor() {
         title: "Floor added to your property",
         variant: "success",
       });
-      handleTab("floors");
-    } catch (error) {
+      handleTab();
+    } catch (_) {
       toast({
         title: "Failed to save floor",
         variant: "destructive",
@@ -65,21 +65,24 @@ export default function AddFloor() {
     }
   }
 
-  function handleTab(val: string) {
+  function handleTab(val?: string) {
     const params = new URLSearchParams(window.location.search);
     if (val) {
-      params.set("tab", val);
+      params.set(QUERIES.TAB, val);
     } else {
-      params.delete("tab");
+      params.delete(QUERIES.TAB);
     }
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     router.push(newUrl);
   }
 
-  if (searchTab !== "add-floor") return;
+  if (searchTab !== TABS.ROOMS.ADD_FLOOR) return;
 
   return (
-    <Dialog open onOpenChange={(val) => handleTab(val ? "add-floor" : "")}>
+    <Dialog
+      open
+      onOpenChange={(val) => handleTab(val ? TABS.ROOMS.ADD_FLOOR : "")}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add floor</DialogTitle>

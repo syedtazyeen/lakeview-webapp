@@ -1,5 +1,5 @@
 import React from "react";
-import { BiBed, BiCog } from "react-icons/bi";
+import { BiCog } from "react-icons/bi";
 
 export default function RoomsLayout({
   children,

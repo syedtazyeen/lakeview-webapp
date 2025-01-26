@@ -12,7 +12,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { BiPlus } from "react-icons/bi";
-import { format, formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 import { useFloorsLoader, useRoomsLoader } from "@/loaders/room";
 import TabLoader from "@/components/common/tab-loader";
 import useRoomStore from "@/store/rooms";

@@ -14,7 +14,7 @@ export function useApi<T>(apiCall: () => Promise<T>, call: boolean = true) {
       try {
         const result = await apiCall();
         setData(result);
-      } catch (err) {
+      } catch (_) {
         setError("Something went wrong. Please try again later.");
       } finally {
         setTimeout(() => {

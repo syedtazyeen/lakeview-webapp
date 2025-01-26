@@ -53,7 +53,7 @@ export default function Step1({ step, setStep, data, saveData }: Props) {
 
   return (
     <form
-      className="h-full flex flex-col space-y-4"
+      className="h-full flex flex-col space-y-4 min-h-52"
       onSubmit={handleSubmit(onSubmit)}
     >
       {categories.length === 0 ? (
@@ -103,7 +103,7 @@ export default function Step1({ step, setStep, data, saveData }: Props) {
         </div>
       )}
 
-      <div className="pt-4 flex items-end justify-end gap-4">
+      <div className="flex-1 flex items-end justify-end gap-4">
         <DrawerClose asChild>
           <Button variant="outline">Discard</Button>
         </DrawerClose>

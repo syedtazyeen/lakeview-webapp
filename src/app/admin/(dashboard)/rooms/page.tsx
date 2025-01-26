@@ -3,7 +3,7 @@
 import TabEmpty from "@/components/common/tab-empty";
 import TabError from "@/components/common/tab-error";
 import TabLoader from "@/components/common/tab-loader";
-import { BiFilter, BiPlus, BiSolidBookContent } from "react-icons/bi";
+import { BiPlus, BiSolidBookContent } from "react-icons/bi";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { MoreVertical } from "lucide-react";

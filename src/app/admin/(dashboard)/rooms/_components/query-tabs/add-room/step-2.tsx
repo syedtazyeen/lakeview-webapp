@@ -52,7 +52,7 @@ export default function Step2({ step, setStep, data, saveData }: Props) {
 
   return (
     <form
-      className="h-full flex flex-col space-y-4"
+      className="h-full flex flex-col space-y-4 min-h-52"
       onSubmit={handleSubmit(onSubmit)}
     >
       {floors.length === 0 ? (

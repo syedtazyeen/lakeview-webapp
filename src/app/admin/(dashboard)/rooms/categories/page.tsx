@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TabEmpty from "@/components/common/tab-empty";
 import TabError from "@/components/common/tab-error";
 import TabLoader from "@/components/common/tab-loader";
 import ViewCategory from "../_components/view-category";
-import { BiCheck, BiPlus, BiSolidBookContent } from "react-icons/bi";
+import { BiPlus, BiSolidBookContent } from "react-icons/bi";
 import { usePathname, useRouter } from "next/navigation";
 import Overview from "@/components/common/overview";
 import { useRoomClassesLoader, useRoomsLoader } from "@/loaders/room";
-import { cn, formatEnumString } from "@/lib/utils";
+import { formatEnumString } from "@/lib/utils";
 import NameCard from "./_components/name-card";
 import { Badge } from "@/components/ui/badge";
 

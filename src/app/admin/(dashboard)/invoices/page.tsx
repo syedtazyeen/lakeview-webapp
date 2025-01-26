@@ -1,6 +1,5 @@
 import { ReceiptText } from "lucide-react";
 import React from "react";
-import { BiReceipt } from "react-icons/bi";
 
 export default function Page() {
   return (

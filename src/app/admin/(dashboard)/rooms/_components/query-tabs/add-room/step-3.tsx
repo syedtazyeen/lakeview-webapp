@@ -32,12 +32,12 @@ export default function Step3({ step, setStep, data, saveData }: Props) {
   }
 
   return (
-    <div className="p-1">
+    <div className="flex flex-col min-h-52">
       <div className="mb-4 flex items-center gap-2 text-sm font-medium">
-        <p className="bg-amber-100 text-amber-700 px-2 py-1 rounded-xl">
+        <p className="bg-chart-2/20 text-chart-2 px-2 py-1 rounded-xl">
           Category: {thisCategory?.title}
         </p>
-        <p className="bg-teal-100 text-teal-700 px-2 py-1 rounded-xl">
+        <p className="bg-chart-3/20 text-chart-3 px-2 py-1 rounded-xl">
           Floor: {thisFloor?.name}
         </p>
         {roomNumbers && roomNumbers.length > 0 && (

@@ -6,8 +6,7 @@ import Step2 from "./step-2";
 import Step3 from "./step-3";
 import Step4 from "./step-4";
 import useRoomStore from "@/store/rooms";
-import { BiBed, BiPlus } from "react-icons/bi";
-import { Button } from "@/components/ui/button";
+import { BiBed } from "react-icons/bi";
 import { createRoomClass } from "@/api/room-classes";
 import { Label } from "@/components/ui/label";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -18,8 +17,8 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
+import { QUERIES, TABS } from "@/lib/constants";
 
 export interface IData {
   title: string;
@@ -47,7 +46,7 @@ export default function NewCategory() {
   const [step, setStep] = React.useState(1);
   const [data, setData] = React.useState<IData>(initialData);
 
-  const tab = searchParams.get("tab") || "";
+  const tab = searchParams.get(QUERIES.TAB) || "";
 
   function renderContent() {
     switch (step) {
@@ -111,15 +110,13 @@ export default function NewCategory() {
   function handleChange(val: boolean) {
     const params = new URLSearchParams(window.location.search);
     if (val) {
-      params.set("tab", "new-category");
+      params.set(QUERIES.TAB, TABS.ROOMS.ADD_CATEGORY);
     } else {
-      params.delete("tab");
+      params.delete(QUERIES.TAB);
     }
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     router.push(newUrl);
   }
-
-  function uploadImages() {}
 
   async function createRoomCategory() {
     try {
@@ -138,7 +135,7 @@ export default function NewCategory() {
         variant: "success",
       });
       router.push(pathname);
-    } catch (error) {
+    } catch (_) {
       setStep(step - 1);
       toast({
         title: "Failed to save category",
@@ -156,7 +153,7 @@ export default function NewCategory() {
   }, [step]);
 
   return (
-    <Drawer open={tab === "new-category"} onOpenChange={handleChange}>
+    <Drawer open={tab === TABS.ROOMS.ADD_CATEGORY} onOpenChange={handleChange}>
       <DrawerContent className="h-full">
         <div className="h-full overflow-auto">
           <div className="mx-auto w-full max-w-xl">
