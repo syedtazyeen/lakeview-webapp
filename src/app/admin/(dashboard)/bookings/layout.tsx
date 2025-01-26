@@ -1,19 +1,14 @@
 import React from "react";
 import { BiCalendar, BiPlus } from "react-icons/bi";
 import Header, { ActionProps, TabProps } from "@/components/common/header";
+import { QUERIES, TABS } from "@/lib/constants";
+import AddBooking from "./_components/query-tabs/add-booking";
 
 const actions: ActionProps[] = [
   {
     label: "Add bookings",
     icon: <BiPlus />,
-    query: "tab=new-bookings",
-    withPath: "/admin/bookings",
-  },
-  {
-    label: "Add category",
-    icon: <BiPlus />,
-    query: "tab=new-category",
-    withPath: "/admin/bookings/categories",
+    query: `${QUERIES.TAB}=${TABS.BOOKINGS.ADD_BOOKING}`,
   },
 ];
 
@@ -30,11 +25,12 @@ export default function RoomsLayout({
 }>) {
   return (
     <div className=" w-full h-full flex flex-col">
+      <AddBooking />
       <Header
         icon={<BiCalendar />}
         name={"Bookings"}
         actions={actions}
-        tabs={tabs}
+        //tabs={tabs}
         includeSearch
       />
       {children}
