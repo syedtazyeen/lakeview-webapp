@@ -16,21 +16,24 @@ import { format } from "date-fns";
 import { useFloorsLoader, useRoomsLoader } from "@/loaders/room";
 import TabLoader from "@/components/common/tab-loader";
 import useRoomStore from "@/store/rooms";
+import { QUERIES, TABS } from "@/lib/constants";
 
 export default function ViewFloors() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { rooms, setRooms } = useRoomStore();
-  const searchTab = searchParams.get("tab") || "";
-  const { floors, isLoading } = useFloorsLoader(searchTab === "floors");
+  const searchTab = searchParams.get(QUERIES.TAB) || "";
+  const { floors, isLoading } = useFloorsLoader(
+    searchTab === TABS.ROOMS.VIEW_FLOOR
+  );
   const { rooms: loadedRooms, isLoading: isRoomsLoading } = useRoomsLoader();
 
-  function handleTab(val: string) {
+  function handleTab(val?: string) {
     const params = new URLSearchParams(window.location.search);
     if (val) {
-      params.set("tab", val);
+      params.set(QUERIES.TAB, val);
     } else {
-      params.delete("tab");
+      params.delete(QUERIES.TAB);
     }
     const newUrl = `${window.location.pathname}?${params.toString()}`;
     router.push(newUrl);
@@ -42,10 +45,13 @@ export default function ViewFloors() {
     }
   }, [loadedRooms]);
 
-  if (searchTab !== "floors") return;
+  if (searchTab !== TABS.ROOMS.VIEW_FLOOR) return;
 
   return (
-    <Dialog open onOpenChange={(val) => handleTab(val ? "floors" : "")}>
+    <Dialog
+      open
+      onOpenChange={(val) => handleTab(val ? TABS.ROOMS.VIEW_FLOOR : "")}
+    >
       <DialogContent className="min-h-96 flex flex-col">
         <DialogHeader className="">
           <DialogTitle>Room floors</DialogTitle>
@@ -91,8 +97,7 @@ export default function ViewFloors() {
 
         <DialogFooter>
           <Button
-            onClick={() => handleTab("add-floor")}
-            size="sm"
+            onClick={() => handleTab(TABS.ROOMS.ADD_FLOOR)}
             className="flex items-center gap-1"
           >
             <BiPlus className="text-xl" /> New floor

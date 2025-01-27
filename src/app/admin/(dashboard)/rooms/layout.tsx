@@ -25,7 +25,7 @@ const actions: ActionProps[] = [
 const tabs: TabProps[] = [
   { name: "All rooms", path: "/admin/rooms" },
   { name: "Categories", path: "/admin/rooms/categories" },
-  { name: "Floors", query: `${QUERIES.TAB}=${TABS.ROOMS.ADD_FLOOR}` },
+  { name: "Floors", query: `${QUERIES.TAB}=${TABS.ROOMS.VIEW_FLOOR}` },
 ];
 
 export default function RoomsLayout({

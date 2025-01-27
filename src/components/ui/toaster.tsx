@@ -33,7 +33,7 @@ export function Toaster() {
         const Icon = variant ? icon[variant] : null;
         return (
           <Toast key={id} variant={variant} {...props}>
-            {Icon && <Icon className="size-5" />}
+            {Icon && <Icon className="size-6" />}
             <div className="grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (

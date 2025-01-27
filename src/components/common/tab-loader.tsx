@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default function TabLoader({
-  placeholder = "Loading your info..",
+  placeholder = "Crunching the latest data for you. Hang tight…",
 }: Props) {
   return (
     <div className="w-full h-full flex flex-col gap-2 items-center py-16 justify-center">

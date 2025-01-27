@@ -41,8 +41,8 @@ export default function Header({
     <div>
       <div className="px-6 pt-4 bg-background">
         <div className="flex justify-between items-center h-8">
-          <p className="font-medium flex items-center gap-2">
-            {Icon && <span className="text-muted-foreground">{Icon}</span>}
+          <p className="font-medium flex items-center gap-2 text-lg">
+            {Icon && <span className="text-muted-foreground size-5">{Icon}</span>}
             {name}
           </p>
           <div className="flex justify-end items-center gap-2">
@@ -64,7 +64,6 @@ export default function Header({
                         onClick={() =>
                           router.push(path ? path : `${pathname}?${query}`)
                         }
-                        size="sm"
                         className="flex items-center gap-1"
                         {...props}
                       >
@@ -106,7 +105,7 @@ function TabItem({ active, name, path, query = "?" }: TabProps) {
     <button
       onClick={() =>
         query !== "?"
-          ? router.push(`${pathname}${query}`)
+          ? router.push(`${pathname}?${query}`)
           : router.push(path || "")
       }
       className={twClass}

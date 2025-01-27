@@ -31,8 +31,8 @@ export default function Sidebar({
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
       className={`${
-        expanded ? "w-48" : "w-14"
-      } fixed z-0 h-[calc(100%-1rem)] px-1.5 py-4 mt-2 gap-2 mx-1 overflow-hidden flex flex-col items-center rounded-2xl transition-all duration-300 ease-in-out`}
+        expanded ? "w-48" : "w-16"
+      } fixed z-0 h-[calc(100%-1rem)] px-2.5 py-4 mt-2 gap-2 overflow-hidden flex flex-col items-center transition-all duration-300 ease-in-out`}
     >
       <div className="flex flex-col items-start w-full px-2 mb-10">
         <Logo />
@@ -50,7 +50,7 @@ export default function Sidebar({
               key={index}
               onClick={() => handleNavigation(href)}
               className={`relative px-[0.78rem] h-11 flex gap-2 items-center text-sm cursor-pointer w-full
-                 rounded-lg overflow-hidden border
+                 rounded-full overflow-hidden border
                 ${
                   isActive
                     ? "bg-background dark:bg-accent text-accent dark:text-foreground shadow-sm border-border"
@@ -58,7 +58,7 @@ export default function Sidebar({
                 } group transition-all duration-300 ease-in-out`}
             >
               <div className="w-fit flex items-center gap-2">
-                <Icon className="text-lg z-20 " />
+                <Icon className="size-4 z-20 translate-y-[0.5px]" />
                 <span className={expanded ? "translate-y-[1px]" : "hidden"}>
                   {label}
                 </span>

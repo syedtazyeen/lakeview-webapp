@@ -1,8 +1,17 @@
 # Lakeview Webapp
 
-**🚧 This project is currently under development 🚧**
+**🚧 This project is under development 🚧**
 
 Lakeview is a hotel booking platform with a booking management system, customer side functionality, and a dashboard. It includes rooms, categories and floors, guest directories, and profiles.
+
+### Test user
+```bash
+Admin  admin@test.com  
+       Test@123
+       
+Guest  guest@test.com  
+       Test@123
+```
 
 ## Features
 

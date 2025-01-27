@@ -16,8 +16,8 @@ export default function DashboardLayout({
       <div className="h-screen w-full">
         <Sidebar expanded={expanded} setExpanded={(val) => setExpanded(val)} />
         <div
-          className={`p-2 ${
-            expanded ? "ml-48" : "ml-14"
+          className={`py-2 pr-2 ${
+            expanded ? "ml-48" : "ml-16"
           } h-full transition-all duration-300 ease-in-out`}
         >
           <div className="w-full h-full bg-background rounded-xl shadow-md overflow-auto">

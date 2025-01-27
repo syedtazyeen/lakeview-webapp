@@ -1,5 +1,12 @@
+import Header, { TabProps } from "@/components/common/header";
 import React from "react";
 import { BiCog } from "react-icons/bi";
+
+const tabs: TabProps[] = [
+  { name: "Preferences", path: "/admin/settings" },
+  { name: "Account", path: "/admin/settings/account" },
+  { name: "Payments", path: "/admin/settings/payments" },
+];
 
 export default function RoomsLayout({
   children,
@@ -8,14 +15,7 @@ export default function RoomsLayout({
 }>) {
   return (
     <div className=" w-full h-full flex flex-col">
-      <div className="px-6 pt-4 pb-2 bg-background">
-        <div className="flex justify-between items-center h-8">
-          <p className="font-medium flex items-center gap-2">
-            <BiCog className="mb-0.5 text-muted-foreground" /> Settings
-          </p>
-        </div>
-      </div>
-      <div className="px-6 mt-2 border-b sticky top-0 z-10 bg-background"></div>
+      <Header icon={<BiCog />} name={"Settings"} tabs={tabs} />
       {children}
     </div>
   );

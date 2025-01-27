@@ -9,8 +9,8 @@ interface Props {
 export default function Logo({ href = "/" }: Props) {
   return (
     <Link href={href}>
-      <div className="h-7 w-7 text-foreground">
-        <img className="w-full h-full" src="/logo.svg" />
+      <div className="h-7 w-7 text-accent">
+        <img className="w-full h-full text-accent" src="/logo.svg" />
       </div>
     </Link>
   );

@@ -6,7 +6,13 @@ import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from "./dialog";
 
 type DatePickerProps = CalendarProps & {
   name: string;
@@ -35,7 +41,7 @@ export function DatePicker({
           <Button
             variant={"outline"}
             className={cn(
-              "w-full justify-start text-left font-normal",
+              "w-full justify-start text-left font-normal rounded-md",
               !date && "text-muted-foreground"
             )}
           >
@@ -43,20 +49,22 @@ export function DatePicker({
             {date ? format(date, dateFormat) : <span>{placeholder}</span>}
           </Button>
         </DialogTrigger>
-        <DialogContent className="w-auto p-5">
-          <DialogTitle>{name}</DialogTitle>
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={(val) => {
-              setDate(val);
-              setOpen(false);
-            }}
-            initialFocus
-            fromDate={props.fromDate}
-            toDate={props.toDate}
-          />
-        </DialogContent>
+        <DialogPortal forceMount>
+          <DialogContent className="w-auto p-5">
+            <DialogTitle>{name}</DialogTitle>
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(val) => {
+                setDate(val);
+                setOpen(false);
+              }}
+              initialFocus
+              fromDate={props.fromDate}
+              toDate={props.toDate}
+            />
+          </DialogContent>
+        </DialogPortal>
       </Dialog>
     </div>
   );
